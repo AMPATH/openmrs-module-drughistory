@@ -1,4 +1,4 @@
-openmrs-module-drughistory
+OpenMRS Drug History Module
 ==========================
 
-Used to generate patient drug history
+Used to generate patient drug history.
