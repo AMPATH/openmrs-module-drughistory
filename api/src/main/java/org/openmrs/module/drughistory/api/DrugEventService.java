@@ -16,6 +16,8 @@ package org.openmrs.module.drughistory.api;
 import org.openmrs.api.OpenmrsService;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
+
 /**
  * This service exposes module's core functionality. It is a Spring managed bean which is configured in moduleApplicationContext.xml.
  * <p>
@@ -33,4 +35,11 @@ public interface DrugEventService extends OpenmrsService {
 	 * Add service methods here
 	 * 
 	 */
+
+    /**
+     * Implementations of this method generate DrugEvent objects from a specific date passed as parameter to Date
+     * If date is null DrugEvent will be generates for the entire period of system existence.
+     * @param sinceWhen
+     */
+    void generateAllDrugEvents(Date sinceWhen);
 }

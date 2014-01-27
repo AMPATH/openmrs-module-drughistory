@@ -19,6 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.module.drughistory.api.DrugEventService;
 import org.openmrs.module.drughistory.api.db.DrugEventDAO;
 
+import java.util.Date;
+
 /**
  * It is a default implementation of {@link DrugEventService}.
  */
@@ -40,5 +42,10 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
      */
     public DrugEventDAO getDao() {
 	    return dao;
+    }
+
+    @Override
+    public void generateAllDrugEvents(Date sinceWhen) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

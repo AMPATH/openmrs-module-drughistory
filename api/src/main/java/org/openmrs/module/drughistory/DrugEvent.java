@@ -14,8 +14,9 @@
 package org.openmrs.module.drughistory;
 
 import java.io.Serializable;
-import org.openmrs.BaseOpenmrsObject;
-import org.openmrs.BaseOpenmrsMetadata;
+import java.util.Date;
+
+import org.openmrs.*;
 
 /**
  * It is a model class. It should extend either {@link BaseOpenmrsObject} or {@link BaseOpenmrsMetadata}.
@@ -24,16 +25,68 @@ public class DrugEvent extends BaseOpenmrsObject implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
-	private Integer id;
-	
-	@Override
+	private Integer drugEventId;
+    private Person person;
+    private Encounter encounter;
+    private Concept concept;
+    private Date dateOccurred;
+    private DrugEventType type;
+
+    public Integer getDrugEventId() {
+        return drugEventId;
+    }
+
+    public void setDrugEventId(Integer drugEventId) {
+        this.drugEventId = drugEventId;
+    }
+
+    @Override
 	public Integer getId() {
-		return id;
+		return getDrugEventId();
 	}
 	
 	@Override
 	public void setId(Integer id) {
-		this.id = id;
+		setDrugEventId(id);
 	}
-	
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    public Encounter getEncounter() {
+        return encounter;
+    }
+
+    public void setEncounter(Encounter encounter) {
+        this.encounter = encounter;
+    }
+
+    public Concept getConcept() {
+        return concept;
+    }
+
+    public void setConcept(Concept concept) {
+        this.concept = concept;
+    }
+
+    public Date getDateOccurred() {
+        return dateOccurred;
+    }
+
+    public void setDateOccurred(Date dateOccurred) {
+        this.dateOccurred = dateOccurred;
+    }
+
+    public DrugEventType getType() {
+        return type;
+    }
+
+    public void setType(DrugEventType type) {
+        this.type = type;
+    }
 }
