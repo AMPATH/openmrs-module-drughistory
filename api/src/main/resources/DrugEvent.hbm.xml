@@ -6,7 +6,7 @@
 <hibernate-mapping package="org.openmrs.module.drughistory">
 
     <class name="DrugEvent"
-           table="${project.parent.artifactId}_drug_event">
+           table="${project.parent.artifactId}_drugevent">
         <id name="drugEventId" type="int" column="drug_event_id" unsaved-value="0">
             <generator class="native"/>
         </id>
@@ -18,6 +18,7 @@
 
         <!-- Associations-->
         <one-to-one name="concept" class="org.openmrs.Concept" foreign-key="concept_id"/>
+        <one-to-one name="reason"  class="org.openmrs.Concept" foreign-key="concept_reason_id"/>
         <one-to-one name="encounter" class="org.openmrs.Encounter" foreign-key="encounter_id"/>
         <one-to-one name="person" class="org.openmrs.Person" foreign-key="person_id"/>
     </class>

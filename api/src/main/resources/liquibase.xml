@@ -4,9 +4,101 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
-    <!--
-        See http://www.liquibase.org/manual/home#available_database_refactorings
-        for a list of supported elements and attributes
-    -->
-    
+        <changeSet id="drughistory-2014-27-01-08:05" author="Mhawila A. Mhawila">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <tableExists tableName="drughistory_drugevent"/>
+                </not>
+            </preConditions>
+            <comment>
+                Creation of drughistory_drugevent table
+            </comment>
+            <createTable tableName="drughistory_drugevent">
+                <column name="drugevent_id" type="int" autoIncrement="true">
+                    <constraints primaryKey="true" nullable="false"/>
+                </column>
+                <column name="uuid" type="char(38)">
+                    <constraints nullable="false"/>
+                </column>
+                <column name="person_id" type="int"/>
+                <column name="concept_id" type="int"/>
+                <column name="concept_reason_id" type="int"/>
+                <column name="encounter_id" type="int"/>
+                <column name="date_occurred" type="timestamp"/>
+                <column name="drug_event_type" type="enum('START','STOP','CONTINUE','CONFIRM','DENY','FILLED')"/>
+            </createTable>
+        </changeSet>
+
+        <!--Foreign keys for drugevent table -->
+        <changeSet id="drughistory-2014-27-01-08:10" author="Mhawila A. Mhawila">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="drughistory_drugevent_person_ref"/>
+                </not>
+            </preConditions>
+            <comment>
+                Adding foreign-key constraint on person_id column
+            </comment>
+
+            <addForeignKeyConstraint
+                    constraintName="drughistory_drugevent_person_ref"
+                    baseTableName="drughistory_drugevent"
+                    baseColumnNames="person_id"
+                    referencedTableName="person"
+                    referencedColumnNames="person_id"/>
+        </changeSet>
+
+        <changeSet id="drughistory-2014-27-01-08:11" author="Mhawila A. Mhawila">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="drughistory_drugevent_reason_ref"/>
+                </not>
+            </preConditions>
+            <comment>
+                Adding foreign-key constraint on concept_id column
+            </comment>
+
+            <addForeignKeyConstraint
+                    constraintName="drughistory_drugevent_concept_ref"
+                    baseTableName="drughistory_drugevent"
+                    baseColumnNames="concept_id"
+                    referencedTableName="concept"
+                    referencedColumnNames="concept_id"/>
+            </changeSet>
+
+        <changeSet id="drughistory-2014-27-01-08:12" author="Mhawila A. Mhawila">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="drughistory_drugevent_reason_ref"/>
+                </not>
+            </preConditions>
+            <comment>
+                Adding foreign-key constraint on reason_id column
+            </comment>
+
+            <addForeignKeyConstraint
+                    constraintName="drughistory_drugevent_reason_ref"
+                    baseTableName="drughistory_drugevent"
+                    baseColumnNames="concept_reason_id"
+                    referencedTableName="concept"
+                    referencedColumnNames="concept_id"/>
+        </changeSet>
+
+        <changeSet id="drughistory-2014-27-01-08:13" author="Mhawila A. Mhawila">
+            <preConditions onFail="MARK_RAN">
+                <not>
+                    <foreignKeyConstraintExists foreignKeyName="drughistory_drugevent_encounter_ref"/>
+                </not>
+            </preConditions>
+            <comment>
+                Adding foreign-key constraint on encounter_id column
+            </comment>
+
+            <addForeignKeyConstraint
+                    constraintName="drughistory_drugevent_encounter_ref"
+                    baseTableName="drughistory_drugevent"
+                    baseColumnNames="encounter_id"
+                    referencedTableName="encounter"
+                    referencedColumnNames="encounter_id"/>
+        </changeSet>
 </databaseChangeLog>
