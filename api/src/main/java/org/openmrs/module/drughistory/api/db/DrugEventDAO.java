@@ -13,14 +13,74 @@
  */
 package org.openmrs.module.drughistory.api.db;
 
+import org.openmrs.Encounter;
+import org.openmrs.Person;
+import org.openmrs.api.db.DAOException;
+import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.module.drughistory.api.DrugEventService;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *  Database methods for {@link DrugEventService}.
  */
 public interface DrugEventDAO {
-	
-	/*
-	 * Add DAO methods here
-	 */
+    /**
+     * saves a newly created DrugEvent.
+     * @param drugEvent
+     */
+    void saveDrugEvent(DrugEvent drugEvent) throws DAOException;
+
+    /**
+     * saveDrugEvents is used to save multiple drug in a batch
+     * @param drugEvents  list of drug events to be saved
+     * @throws DAOException
+     */
+    void saveDrugEvents(List<DrugEvent> drugEvents) throws DAOException;
+
+    /**
+     *
+     * @param person  a patient for whom drug events are required
+     * @return list of DrugEvent belonging to person for the entire period
+     * @throws DAOException
+     */
+    List<DrugEvent> getDrugEventsForPatient(Person person) throws DAOException;
+
+    /**
+     *
+     * @param person    a patient for whom drug events are required
+     * @param sinceWhen a date from which drug events are required
+     * @return list of DrugEvent belonging to person for period between sinceWhen and now
+     * @throws DAOException
+     */
+    List<DrugEvent> getDrugEventsForPatient(Person person, Date sinceWhen) throws DAOException;
+
+    /**
+     *
+     * @param encounter
+     * @return
+     * @throws DAOException
+     */
+    List<DrugEvent> getEncounterDrugEvents(Encounter encounter)throws DAOException;
+
+    /**
+     * Purges a drug event passed as parameter
+     * @param drugEvent a drug event to be purged
+     * @throws DAOException
+     */
+    void purgeDrugEvent(DrugEvent drugEvent) throws DAOException;
+
+    /**
+     * Purge all drug events in the system
+     * @throws DAOException
+     */
+    void purgeAllDrugEvents() throws DAOException;
+
+    /**
+     * Purge all drug events relating to patient
+     * @param person a patient whose drug events have to be purged.
+     * @throws DAOException
+     */
+    void purgeDrugEventsForPatient(Person person) throws DAOException;
 }

@@ -40,6 +40,8 @@ public interface DrugEventService extends OpenmrsService {
      * Implementations of this method generate DrugEvent objects from a specific date passed as parameter to Date
      * If date is null DrugEvent will be generates for the entire period of system existence.
      * @param sinceWhen
+     * @should generate All drug events given start date
+     * @should generate All drug events when sinceWhen is null
      */
     void generateAllDrugEvents(Date sinceWhen);
 }

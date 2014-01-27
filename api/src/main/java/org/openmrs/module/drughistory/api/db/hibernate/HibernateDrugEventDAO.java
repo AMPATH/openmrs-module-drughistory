@@ -16,7 +16,14 @@ package org.openmrs.module.drughistory.api.db.hibernate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.SessionFactory;
+import org.openmrs.Encounter;
+import org.openmrs.Person;
+import org.openmrs.api.db.DAOException;
+import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.module.drughistory.api.db.DrugEventDAO;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * It is a default implementation of  {@link DrugEventDAO}.
@@ -38,5 +45,45 @@ public class HibernateDrugEventDAO implements DrugEventDAO {
      */
     public SessionFactory getSessionFactory() {
 	    return sessionFactory;
+    }
+
+    @Override
+    public void saveDrugEvent(DrugEvent drugEvent) throws DAOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void saveDrugEvents(List<DrugEvent> drugEvents) throws DAOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<DrugEvent> getDrugEventsForPatient(Person person) throws DAOException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<DrugEvent> getDrugEventsForPatient(Person person, Date sinceWhen) throws DAOException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<DrugEvent> getEncounterDrugEvents(Encounter encounter) throws DAOException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void purgeDrugEvent(DrugEvent drugEvent) throws DAOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void purgeAllDrugEvents() throws DAOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void purgeDrugEventsForPatient(Person person) throws DAOException {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 }
