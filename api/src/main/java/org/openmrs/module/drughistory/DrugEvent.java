@@ -29,6 +29,7 @@ public class DrugEvent extends BaseOpenmrsObject implements Serializable {
     private Person person;
     private Encounter encounter;
     private Concept concept;
+    private Concept reason;
     private Date dateOccurred;
     private DrugEventType type;
 
@@ -88,5 +89,13 @@ public class DrugEvent extends BaseOpenmrsObject implements Serializable {
 
     public void setType(DrugEventType type) {
         this.type = type;
+    }
+
+    public Concept getReason() {
+        return reason;
+    }
+
+    public void setReason(Concept reason) {
+        this.reason = reason;
     }
 }
