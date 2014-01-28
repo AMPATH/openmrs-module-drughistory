@@ -28,5 +28,4 @@
 	
 	<context:component-scan base-package="org.openmrs.module.drughistory.web.controller" />
  
-		
 </beans>
