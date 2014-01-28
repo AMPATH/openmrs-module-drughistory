@@ -59,7 +59,7 @@ public interface DrugEventDAO {
     /**
      *
      * @param encounter
-     * @return
+     * @return   list of DrugEvents for a given encounter
      * @throws DAOException
      */
     List<DrugEvent> getEncounterDrugEvents(Encounter encounter)throws DAOException;
@@ -73,14 +73,16 @@ public interface DrugEventDAO {
 
     /**
      * Purge all drug events in the system
+     * @return the number of Drug event rows deleted
      * @throws DAOException
      */
-    void purgeAllDrugEvents() throws DAOException;
+    int purgeAllDrugEvents() throws DAOException;
 
     /**
      * Purge all drug events relating to patient
      * @param person a patient whose drug events have to be purged.
+     * @return the number of drug event rows belonging to person that have been deleted.
      * @throws DAOException
      */
-    void purgeDrugEventsForPatient(Person person) throws DAOException;
+    int purgeDrugEventsForPatient(Person person) throws DAOException;
 }

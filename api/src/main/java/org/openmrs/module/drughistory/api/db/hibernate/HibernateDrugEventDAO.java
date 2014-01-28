@@ -15,7 +15,10 @@ package org.openmrs.module.drughistory.api.db.hibernate;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.openmrs.Encounter;
 import org.openmrs.Person;
 import org.openmrs.api.db.DAOException;
@@ -49,41 +52,56 @@ public class HibernateDrugEventDAO implements DrugEventDAO {
 
     @Override
     public void saveDrugEvent(DrugEvent drugEvent) throws DAOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if(drugEvent != null) {
+            getSessionFactory().getCurrentSession().saveOrUpdate(drugEvent);
+        }
     }
 
     @Override
     public void saveDrugEvents(List<DrugEvent> drugEvents) throws DAOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+        //TODO To be implemented with Hibernate batch processing.
     }
 
     @Override
     public List<DrugEvent> getDrugEventsForPatient(Person person) throws DAOException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(DrugEvent.class);
+        criteria.add(Restrictions.eq("person",person));
+        return criteria.list();
     }
 
     @Override
     public List<DrugEvent> getDrugEventsForPatient(Person person, Date sinceWhen) throws DAOException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(DrugEvent.class);
+        criteria.add(Restrictions.eq("person",person)).add(Restrictions.ge("dateOccurred",sinceWhen));
+        return criteria.list();
     }
 
     @Override
     public List<DrugEvent> getEncounterDrugEvents(Encounter encounter) throws DAOException {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(DrugEvent.class);
+        criteria.add(Restrictions.eq("encounter",encounter));
+        return criteria.list();
     }
 
     @Override
     public void purgeDrugEvent(DrugEvent drugEvent) throws DAOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if(drugEvent != null) {
+            getSessionFactory().getCurrentSession().delete(drugEvent);
+        }
     }
 
     @Override
-    public void purgeAllDrugEvents() throws DAOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public int purgeAllDrugEvents() throws DAOException {
+        String hql = "DELETE FROM DrugEvent";
+        Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+        return query.executeUpdate();
     }
 
     @Override
-    public void purgeDrugEventsForPatient(Person person) throws DAOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public int purgeDrugEventsForPatient(Person person) throws DAOException {
+        String hql = "DELETE FROM DrugEvent WHERE person_id = :personId";
+        Query query = getSessionFactory().getCurrentSession().createQuery(hql);
+        query.setInteger("personId",person.getPersonId());
+        return query.executeUpdate();
     }
 }
