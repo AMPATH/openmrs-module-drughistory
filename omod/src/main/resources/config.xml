@@ -28,9 +28,8 @@
 	
 	<!-- Maps hibernate file's, if present -->
 	<mappingFiles>
-				
 		DrugEvent.hbm.xml
-				
+		Regimen.hbm.xml
 	</mappingFiles>
 
 	<!-- Internationalization -->

@@ -10,8 +10,13 @@
 		href="${pageContext.request.contextPath}/module/drughistory/manage.form"><spring:message
 				code="drughistory.manage" /></a>
 	</li>
-	
-	<!-- Add further links here -->
+
+    <li
+    <c:if test='<%= request.getRequestURI().contains("/regimen") %>'>class="active"</c:if>>
+    <a
+            href="${pageContext.request.contextPath}/module/drughistory/regimen.list"><spring:message
+            code="drughistory.regimen.manage" /></a>
+    </li>
 </ul>
 <h2>
 	<spring:message code="drughistory.title" />
