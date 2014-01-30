@@ -15,8 +15,15 @@ package org.openmrs.module.drughistory.api;
 
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.springframework.test.annotation.ExpectedException;
+
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Tests {@link ${DrugEventService}}.
@@ -27,4 +34,12 @@ public class  DrugEventServiceTest extends BaseModuleContextSensitiveTest {
 	public void shouldSetupContext() {
 		assertNotNull(Context.getService(DrugEventService.class));
 	}
+
+    @Test
+    @ExpectedException(APIException.class)
+    public void generateAllDrugEvents_shouldGenerateAPIExeptionIfSinceWhenIsGreaterThanToday() throws Exception{
+        GregorianCalendar gc = new GregorianCalendar(2014,2,14);
+        Date sinceWhen = gc.getTime();
+        Context.getService(DrugEventService.class).generateAllDrugEvents(sinceWhen);
+    }
 }

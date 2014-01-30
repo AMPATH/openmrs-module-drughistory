@@ -37,9 +37,7 @@ public interface DrugEventService extends OpenmrsService {
      * Implementations of this method generate DrugEvent objects from a specific date passed as parameter to Date
      * If date is null DrugEvent will be generates for the entire period of system existence.
      * @param sinceWhen Date from which to calculate drug events
-     * @should check sinceWhen is earlier than or equal to today when not null
-     * @should generate All drug events given start when sinceWhen not null
-     * @should generate All drug events when sinceWhen is null
+     * @should throw APIException if sinceWhen is greater than today.
      */
     void generateAllDrugEvents(Date sinceWhen);
 
@@ -47,10 +45,6 @@ public interface DrugEventService extends OpenmrsService {
      * Generate drug  events for a given a patient from a given date up to now.
      * @param patient
      * @param sinceWhen
-     * @should check patient is not null
-     * @should generate patient's all drug events when sinceWhen is null
-     * @should check sinceWhen is earlier than or equal to today when not null
-     * @should generate patient's all drug events from a given date when sinceWhen is not null
      */
     void generateDrugEventForPatient(Patient patient,Date sinceWhen);
 

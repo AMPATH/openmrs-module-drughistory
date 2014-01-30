@@ -14,6 +14,7 @@
 package org.openmrs.module.drughistory.api.impl;
 
 import org.openmrs.Patient;
+import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -49,7 +50,15 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
 
     @Override
     public void generateAllDrugEvents(Date sinceWhen) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if(sinceWhen != null) {
+            if(sinceWhen.compareTo(new Date())>0){
+                throw new APIException("Date: "+sinceWhen+" should be greater than the date of today");
+            }else{
+
+            }
+        }else{
+            //All drug events.
+        }
     }
 
     @Override
