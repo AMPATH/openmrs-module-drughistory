@@ -17,10 +17,10 @@
         <property name="type" type="int" column="type" not-null="true"/>
 
         <!-- Associations-->
-        <many-to-one name="concept" class="org.openmrs.Concept" foreign-key="concept_id"/>
-        <many-to-one name="reason"  class="org.openmrs.Concept" foreign-key="concept_reason_id"/>
-        <many-to-one name="encounter" class="org.openmrs.Encounter" foreign-key="encounter_id"/>
-        <many-to-one name="person" class="org.openmrs.Person" foreign-key="person_id"/>
+        <one-to-one name="concept" class="org.openmrs.Concept" foreign-key="concept_id"/>
+        <one-to-one name="reason"  class="org.openmrs.Concept" foreign-key="concept_reason_id"/>
+        <one-to-one name="encounter" class="org.openmrs.Encounter" foreign-key="encounter_id"/>
+        <one-to-one name="person" class="org.openmrs.Person" foreign-key="person_id"/>
     </class>
 
 </hibernate-mapping>

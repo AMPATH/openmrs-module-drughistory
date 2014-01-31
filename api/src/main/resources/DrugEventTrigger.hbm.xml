@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping package="org.openmrs.module.drughistory">
+
+    <class name="DrugEventTrigger"
+           table="${project.parent.artifactId}_drugeventtrigger">
+        <id name="drugEventTriggerId" type="int" column="drugeventtrigger_id" unsaved-value="0">
+            <generator class="native"/>
+        </id>
+        <discriminator column="drugeventtrigger_id" insert="false"/>
+        <property name="uuid" type="java.lang.String" column="uuid"
+                  length="38" unique="true"/>
+        <property name="dateCreated" type="java.util.Date" column="date_created" length="19"/>
+        <property name="dateChanged" type="java.util.Date" column="date_changed" length="19"/>
+        <property name="dateRetired" type="java.util.Date" column="date_retired" length="19"/>
+        <property name="retired" type="java.lang.Boolean" column="retired"/>
+        <property name="retireReason" type="java.lang.String" column="retire_reason" length="500"/>
+
+        <!-- Associations-->
+        <many-to-one name="question" class="org.openmrs.Concept" foreign-key="question_concept_id"/>
+        <many-to-one name="answer"  class="org.openmrs.Concept" foreign-key="answer_concept_id"/>
+        <many-to-one name="eventConcept" class="org.openmrs.Concept" foreign-key="event_concept_id"/>
+        <many-to-one name="eventReason" class="org.openmrs.Concept" foreign-key="event_reason_concept_id"/>
+        <many-to-one name="creator" class="org.openmrs.User" foreign-key="created_by"/>
+        <many-to-one name="changedBy" class="org.openmrs.User" foreign-key="changed_by"/>
+        <many-to-one name="retiredBy" class="org.openmrs.User" foreign-key="retired_by"/>
+    </class>
+
+</hibernate-mapping>

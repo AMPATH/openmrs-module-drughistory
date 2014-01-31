@@ -13,10 +13,13 @@
  */
 package org.openmrs.module.drughistory.api;
 
+import org.openmrs.Patient;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.drughistory.DrugEventTrigger;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * This service exposes module's core functionality. It is a Spring managed bean which is configured in moduleApplicationContext.xml.
@@ -30,18 +33,40 @@ import java.util.Date;
  */
 @Transactional
 public interface DrugEventService extends OpenmrsService {
-     
-	/*
-	 * Add service methods here
-	 * 
-	 */
-
     /**
      * Implementations of this method generate DrugEvent objects from a specific date passed as parameter to Date
      * If date is null DrugEvent will be generates for the entire period of system existence.
-     * @param sinceWhen
-     * @should generate All drug events given start date
-     * @should generate All drug events when sinceWhen is null
+     * @param sinceWhen Date from which to calculate drug events
+     * @should throw APIException if sinceWhen is greater than today.
      */
     void generateAllDrugEvents(Date sinceWhen);
+
+    /**
+     * Generate drug  events for a given a patient from a given date up to now.
+     * @param patient
+     * @param sinceWhen
+     */
+    void generateDrugEventForPatient(Patient patient,Date sinceWhen);
+
+    /**
+     * Generate drug events from a trigger
+     * @param trigger
+     * @param sinceWhen
+     */
+    void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen);
+
+    /**
+     *
+     * @param trigger
+     * @param patient
+     * @param sinceWhen
+     */
+    void generateDrugEventsFromTriggerForPatient(DrugEventTrigger trigger, Patient patient, Date sinceWhen);
+
+    /**
+     *
+     * @param includeRetired
+     * @return   List of event triggers.
+     */
+    List<DrugEventTrigger> getAllDrugEventTriggers(Boolean includeRetired);
 }

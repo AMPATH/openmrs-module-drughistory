@@ -13,13 +13,17 @@
  */
 package org.openmrs.module.drughistory.api.impl;
 
+import org.openmrs.Patient;
+import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.drughistory.DrugEventTrigger;
 import org.openmrs.module.drughistory.api.DrugEventService;
 import org.openmrs.module.drughistory.api.db.DrugEventDAO;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * It is a default implementation of {@link DrugEventService}.
@@ -46,6 +50,35 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
 
     @Override
     public void generateAllDrugEvents(Date sinceWhen) {
+        if(sinceWhen != null) {
+            if(sinceWhen.compareTo(new Date())>0){
+                throw new APIException("Date: "+sinceWhen+" should be greater than the date of today");
+            }else{
+
+            }
+        }else{
+            //All drug events.
+        }
+    }
+
+    @Override
+    public void generateDrugEventForPatient(Patient patient, Date sinceWhen) {
         //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void generateDrugEventsFromTriggerForPatient(DrugEventTrigger trigger, Patient patient, Date sinceWhen) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+
+    @Override
+    public List<DrugEventTrigger> getAllDrugEventTriggers(Boolean includeRetired) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }

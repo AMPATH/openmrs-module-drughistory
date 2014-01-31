@@ -30,6 +30,7 @@
 	<mappingFiles>
 		DrugEvent.hbm.xml
 		Regimen.hbm.xml
+        DrugEventTrigger.hbm.xml
 	</mappingFiles>
 
 	<!-- Internationalization -->
