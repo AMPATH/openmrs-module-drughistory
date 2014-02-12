@@ -38,6 +38,11 @@
                                     <property name="sessionFactory" ref="sessionFactory"/>
 								</bean>
 							</property>
+                            <property name="triggerDAO">
+                                <bean class="${project.parent.groupId}.${project.parent.artifactId}.api.db.hibernate.HibernateDrugEventTriggerDAO">
+                                    <property name="sessionFactory" ref="sessionFactory"/>
+                                </bean>
+                            </property>
 						</bean>
 					</property>
                     <property name="preInterceptors" ref="serviceInterceptors"/>

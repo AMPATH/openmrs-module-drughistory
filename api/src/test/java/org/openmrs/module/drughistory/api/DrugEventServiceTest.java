@@ -26,13 +26,14 @@ import org.openmrs.module.drughistory.DrugEventType;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.test.annotation.ExpectedException;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Tests {@link ${DrugEventService}}.
+ * Tests {@link${DrugEventService}}.
  */
 public class  DrugEventServiceTest extends BaseModuleContextSensitiveTest {
     private DrugEventService drugEventService;
@@ -50,7 +51,8 @@ public class  DrugEventServiceTest extends BaseModuleContextSensitiveTest {
     @Test
     @ExpectedException(IllegalArgumentException.class)
     public void generateAllDrugEvents_shouldThrowExceptionIfSinceWhenIsGreaterThanToday() throws Exception{
-        GregorianCalendar gc = new GregorianCalendar(2014,2,14);
+        GregorianCalendar gc = new GregorianCalendar();
+        gc.add(GregorianCalendar.DAY_OF_MONTH,1);
         Date sinceWhen = gc.getTime();
         Context.getService(DrugEventService.class).generateAllDrugEvents(sinceWhen);
     }
@@ -107,8 +109,8 @@ public class  DrugEventServiceTest extends BaseModuleContextSensitiveTest {
         Assert.assertEquals(drugEvents.size(), 3);
 
         DrugEvent event = drugEvents.get(0);
-        Assert.assertEquals((long) event.getPerson().getPersonId(), 7);
-        Assert.assertEquals((long) event.getConcept().getConceptId(),5089);
+        Assert.assertEquals(7, (long) event.getPerson().getPersonId());
+        Assert.assertEquals(5089, (long) event.getConcept().getConceptId());
     }
 
     /**
@@ -117,8 +119,19 @@ public class  DrugEventServiceTest extends BaseModuleContextSensitiveTest {
      */
     @Test
     public void generateDrugEventsFromTrigger_shouldGenerateDrugEventsWithObsDatetimeLaterThanOrEqualToSinceWhen() throws Exception {
-        //TODO auto-generated
-        Assert.fail("Not yet implemented");
+        GregorianCalendar gc = new GregorianCalendar(2008,7,19); //Months start from 0 in GC.
+        Date sinceWhen = gc.getTime();
+        DrugEventTrigger trigger = new DrugEventTrigger();
+        trigger.setQuestion(Context.getConceptService().getConcept(5089));
+        trigger.setEventConcept(trigger.getQuestion());
+        trigger.setEventType(DrugEventType.CONTINUE);
+        drugEventService.generateDrugEventsFromTrigger(trigger,sinceWhen);
+
+        List<DrugEvent> drugEvents = drugEventService.getAllDrugEvents(null);
+        Assert.assertEquals(1, (long) drugEvents.size());
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Assert.assertEquals(dateFormat.format(gc.getTime()),dateFormat.format(drugEvents.get(0).getDateOccurred()));
     }
 
 }

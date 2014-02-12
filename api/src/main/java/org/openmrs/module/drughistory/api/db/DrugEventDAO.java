@@ -14,6 +14,7 @@
 package org.openmrs.module.drughistory.api.db;
 
 import org.openmrs.Encounter;
+import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.drughistory.DrugEvent;
@@ -87,7 +88,20 @@ public interface DrugEventDAO {
      */
     int purgeDrugEventsForPatient(Person person) throws DAOException;
 
+    /**
+     *
+     * @param trigger
+     * @param sinceWhen
+     */
     void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen);
+
+    /**
+     *
+     * @param person
+     * @param trigger
+     * @param sinceWhen
+     */
+    void generateDrugEventsFromTrigger(Person person,DrugEventTrigger trigger,Date sinceWhen);
 
     /**
      *

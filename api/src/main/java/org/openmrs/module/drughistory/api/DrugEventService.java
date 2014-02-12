@@ -14,6 +14,7 @@
 package org.openmrs.module.drughistory.api;
 
 import org.openmrs.Patient;
+import org.openmrs.Person;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.module.drughistory.DrugEventTrigger;
@@ -45,10 +46,10 @@ public interface DrugEventService extends OpenmrsService {
 
     /**
      * Generate drug  events for a given a patient from a given date up to now.
-     * @param patient
+     * @param person
      * @param sinceWhen
      */
-    void generateDrugEventForPatient(Patient patient,Date sinceWhen);
+    void generateAllDrugEvents(Person person,Date sinceWhen);
 
     /**
      * Generate drug events from a trigger
@@ -66,10 +67,10 @@ public interface DrugEventService extends OpenmrsService {
     /**
      *
      * @param trigger
-     * @param patient
+     * @param person
      * @param sinceWhen
      */
-    void generateDrugEventsFromTriggerForPatient(DrugEventTrigger trigger, Patient patient, Date sinceWhen);
+    void generateDrugEventsFromTrigger(Person person,DrugEventTrigger trigger, Date sinceWhen)throws IllegalArgumentException;
 
     /**
      *
