@@ -33,6 +33,10 @@ public class DrugEvent extends BaseOpenmrsObject implements Serializable {
     private Date dateOccurred;
     private DrugEventType type;
 
+    public DrugEvent(){
+        super();
+    }
+
     public DrugEvent(Person person, Concept concept, DrugEventType type) {
         this.person = person;
         this.concept = concept;

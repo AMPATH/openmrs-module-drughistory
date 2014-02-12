@@ -17,6 +17,7 @@ import org.openmrs.Encounter;
 import org.openmrs.Person;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.drughistory.DrugEvent;
+import org.openmrs.module.drughistory.DrugEventTrigger;
 import org.openmrs.module.drughistory.api.DrugEventService;
 
 import java.util.Date;
@@ -37,7 +38,7 @@ public interface DrugEventDAO {
      * @param drugEvents  list of drug events to be saved
      * @throws DAOException
      */
-    void saveDrugEvents(List<DrugEvent> drugEvents) throws DAOException;
+    void saveDrugEvents(List<DrugEvent> drugEvents,int bathSize) throws DAOException;
 
     /**
      *
@@ -85,4 +86,13 @@ public interface DrugEventDAO {
      * @throws DAOException
      */
     int purgeDrugEventsForPatient(Person person) throws DAOException;
+
+    void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen);
+
+    /**
+     *
+     * @param sinceWhen
+     * @return list of DrugEvents since a given date if not null
+     */
+    List<DrugEvent> getAllDrugEvents(Date sinceWhen);
 }

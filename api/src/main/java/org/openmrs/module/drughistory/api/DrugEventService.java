@@ -15,6 +15,7 @@ package org.openmrs.module.drughistory.api;
 
 import org.openmrs.Patient;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.module.drughistory.DrugEventTrigger;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +38,10 @@ public interface DrugEventService extends OpenmrsService {
      * Implementations of this method generate DrugEvent objects from a specific date passed as parameter to Date
      * If date is null DrugEvent will be generates for the entire period of system existence.
      * @param sinceWhen Date from which to calculate drug events
-     * @should throw APIException if sinceWhen is greater than today.
+     * @throws IllegalArgumentException
+     * @should throw IllegalArgumentException if sinceWhen is greater than today.
      */
-    void generateAllDrugEvents(Date sinceWhen);
+    void generateAllDrugEvents(Date sinceWhen) throws IllegalArgumentException;
 
     /**
      * Generate drug  events for a given a patient from a given date up to now.
@@ -52,8 +54,14 @@ public interface DrugEventService extends OpenmrsService {
      * Generate drug events from a trigger
      * @param trigger
      * @param sinceWhen
+     * @throws IllegalArgumentException
+     * @should throw exception when trigger is null
+     * @should throw exception when sinceWhen is in the future
+     * @should generate drug events with given concept question
+     * @should generate drug events with obs datetime later than or equal to sinceWhen
+     * @should fail when trigger event type is unspecified
      */
-    void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen);
+    void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen) throws IllegalArgumentException;
 
     /**
      *
@@ -69,4 +77,11 @@ public interface DrugEventService extends OpenmrsService {
      * @return   List of event triggers.
      */
     List<DrugEventTrigger> getAllDrugEventTriggers(Boolean includeRetired);
+
+    /**
+     *
+     * @param sinceWhen
+     * @return list of drug events since a given date if not null
+     */
+    List<DrugEvent> getAllDrugEvents(Date sinceWhen) throws IllegalArgumentException;
 }

@@ -33,6 +33,7 @@ public class DrugEventTrigger extends BaseOpenmrsMetadata implements Serializabl
     private Concept eventConcept;
     private Concept eventReason;
     private transient String customQuery;
+    private DrugEventType eventType;
 
     @Override
     public Integer getId() {
@@ -90,5 +91,17 @@ public class DrugEventTrigger extends BaseOpenmrsMetadata implements Serializabl
 
     public void setCustomQuery(String customQuery) {
         this.customQuery = customQuery;
+    }
+
+    public boolean hasCustomQuery() {
+        return customQuery != null;
+    }
+
+    public DrugEventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(DrugEventType eventType) {
+        this.eventType = eventType;
     }
 }

@@ -14,10 +14,10 @@
 package org.openmrs.module.drughistory.api.impl;
 
 import org.openmrs.Patient;
-import org.openmrs.api.APIException;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.module.drughistory.DrugEventTrigger;
 import org.openmrs.module.drughistory.api.DrugEventService;
 import org.openmrs.module.drughistory.api.db.DrugEventDAO;
@@ -29,34 +29,34 @@ import java.util.List;
  * It is a default implementation of {@link DrugEventService}.
  */
 public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEventService {
-	
-	protected final Log log = LogFactory.getLog(this.getClass());
-	
-	private DrugEventDAO dao;
-	
-	/**
+
+    protected final Log log = LogFactory.getLog(this.getClass());
+
+    private DrugEventDAO dao;
+
+    /**
      * @param dao the dao to set
      */
     public void setDao(DrugEventDAO dao) {
-	    this.dao = dao;
+        this.dao = dao;
     }
-    
+
     /**
      * @return the dao
      */
     public DrugEventDAO getDao() {
-	    return dao;
+        return dao;
     }
 
     @Override
-    public void generateAllDrugEvents(Date sinceWhen) {
-        if(sinceWhen != null) {
-            if(sinceWhen.compareTo(new Date())>0){
-                throw new APIException("Date: "+sinceWhen+" should be greater than the date of today");
-            }else{
+    public void generateAllDrugEvents(final Date sinceWhen) {
+        if (sinceWhen != null) {
+            if (sinceWhen.compareTo(new Date()) > 0) {
+                throw new IllegalArgumentException("Date: " + sinceWhen + " should be greater than the date of today");
+            } else {
 
             }
-        }else{
+        } else {
             //All drug events.
         }
     }
@@ -67,8 +67,20 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
     }
 
     @Override
-    public void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void generateDrugEventsFromTrigger(final DrugEventTrigger trigger, final Date sinceWhen) {
+        List<DrugEvent> events = null;
+        if (trigger == null) {
+            throw new IllegalArgumentException("trigger can not be null");
+        }
+
+        if(trigger.getEventType() == null) {
+            throw new IllegalArgumentException("Trigger's eventType can not be null");
+        }
+
+        if (sinceWhen != null && sinceWhen.compareTo(new Date()) > 0) {
+            throw new IllegalArgumentException("Date: " + sinceWhen + " should be earlier than or equal to today");
+        }
+        dao.generateDrugEventsFromTrigger(trigger, sinceWhen);
     }
 
     @Override
@@ -80,5 +92,13 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
     @Override
     public List<DrugEventTrigger> getAllDrugEventTriggers(Boolean includeRetired) {
         return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public List<DrugEvent> getAllDrugEvents(Date sinceWhen){
+        if (sinceWhen != null && sinceWhen.compareTo(new Date()) > 0) {
+            throw new IllegalArgumentException("Date: " + sinceWhen + " should be earlier than or equal to today");
+        }
+        return dao.getAllDrugEvents(sinceWhen);
     }
 }
