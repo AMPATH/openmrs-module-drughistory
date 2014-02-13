@@ -5,6 +5,9 @@
 
 <hibernate-configuration>
     <session-factory>
+        <property name="hibernate.jdbc.batch_size">50</property>
+
+        <!-- Hibernate mapping giles -->
         <mapping resource="DrugEvent.hbm.xml"/>
         <mapping resource="Regimen.hbm.xml"/>
     </session-factory>
