@@ -14,10 +14,9 @@
                   length="38" unique="true"/>
         <property name="dateOccurred" type="java.util.Date" column="date_occurred"/>
 
-        <property name="type" column="drug_event_type" not-null="true">
+        <property name="eventType" column="drug_event_type" not-null="true" length="32">
             <type name="org.openmrs.util.HibernateEnumType">
                 <param name="enumClassName">org.openmrs.module.drughistory.DrugEventType</param>
-                <!--<param name="type">12</param>-->
             </type>
         </property>
 

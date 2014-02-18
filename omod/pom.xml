@@ -15,25 +15,18 @@
 
 	<dependencies>
 
-		<!-- 
-		Add other dependencies from parent's pom: 
-		<dependency> 
-			<groupId>org.other.library</groupId> 
-			<artifactId>library-name</artifactId> 
-		</dependency> 
-		-->
-		
+
 		<!-- Begin OpenMRS modules -->
-		
+
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		
-				
+
+
 		<!-- End OpenMRS modules -->
-		
+
 
 		<!-- Begin OpenMRS core -->
 
@@ -48,7 +41,7 @@
 			<artifactId>openmrs-web</artifactId>
 			<type>jar</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
@@ -69,7 +62,7 @@
 			<type>pom</type>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<!-- End OpenMRS core -->
 
 	</dependencies>
@@ -77,28 +70,28 @@
 	<build>
 		<finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
 		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-			</resource>
-			<resource>
-				<directory>src/main/webapp</directory>
-				<filtering>false</filtering>
-				<excludes>
-					<exclude>resources</exclude>
-				</excludes>
-				<targetPath>web/module</targetPath>
-			</resource>
-			<resource>
-				<directory>src/main/webapp</directory>
-				<filtering>false</filtering>
-				<includes>
-					<include>resources</include>
-				</includes>
-				<targetPath>web/module</targetPath>
-			</resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <excludes>
+                    <exclude>**/*.xml</exclude>
+                    <exclude>**/*.properties</exclude>
+                </excludes>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+            <resource>
+                <directory>src/main/webapp</directory>
+                <filtering>false</filtering>
+                <targetPath>web/module</targetPath>
+            </resource>
 		</resources>
-
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>
@@ -114,8 +107,8 @@
 						<includeEmptyDirs>true</includeEmptyDirs>
 					</configuration>
 				</plugin>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
+				<!--This plugin's configuration is used to store Eclipse m2e settings
+				only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
@@ -133,7 +126,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 								<pluginExecution>
@@ -146,7 +139,7 @@
 										</goals>
 									</pluginExecutionFilter>
 									<action>
-										<ignore></ignore>
+										<ignore />
 									</action>
 								</pluginExecution>
 							</pluginExecutions>
@@ -191,9 +184,9 @@
 						<configuration>
 							<includeGroupIds>${project.parent.groupId}</includeGroupIds>
 							<includeArtifactIds>${project.parent.artifactId}-api</includeArtifactIds>
-							<excludeTransitive>true</excludeTransitive>
-							<includes>**/*</includes>
-							<outputDirectory>${project.build.directory}/classes</outputDirectory>
+                            <includeScope>compile</includeScope>
+                            <includes>**\/*.xml,**\/*.properties</includes>
+                            <outputDirectory>${project.build.directory}/classes</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
