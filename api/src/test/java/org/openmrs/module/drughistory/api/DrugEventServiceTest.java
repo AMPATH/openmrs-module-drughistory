@@ -25,6 +25,7 @@ import org.openmrs.module.drughistory.DrugEventType;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.test.annotation.ExpectedException;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -111,7 +112,7 @@ public class DrugEventServiceTest extends BaseModuleContextSensitiveTest {
 		List<DrugEvent> drugEvents = drugEventService.getAllDrugEvents(null);
 
 		//There are three obs with concept_id 5089
-		Assert.assertEquals(drugEvents.size(), 3);
+		Assert.assertEquals(3, drugEvents.size());
 
         DrugEvent event = drugEvents.get(0);
         Assert.assertEquals(7, (long) event.getPerson().getPersonId());
@@ -126,9 +127,12 @@ public class DrugEventServiceTest extends BaseModuleContextSensitiveTest {
     public void generateDrugEventsFromTrigger_shouldGenerateDrugEventsWithObsDatetimeLaterThanOrEqualToSinceWhen() throws Exception {
         GregorianCalendar gc = new GregorianCalendar(2008,7,19); //Months start from 0 in GC.
         Date sinceWhen = gc.getTime();
+
+		Concept q = Context.getConceptService().getConcept(5089);
+
         DrugEventTrigger trigger = new DrugEventTrigger();
-        trigger.setQuestion(Context.getConceptService().getConcept(5089));
-        trigger.setEventConcept(trigger.getQuestion());
+		trigger.addQuestion(q);
+		trigger.setEventConcept(q);
         trigger.setEventType(DrugEventType.CONTINUE);
         drugEventService.generateDrugEventsFromTrigger(trigger,sinceWhen);
 

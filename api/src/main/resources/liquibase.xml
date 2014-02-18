@@ -318,17 +318,17 @@
                 />
     </changeSet>
 
-    <changeSet id="drughistory-2014-01-28-b" author="jkeiper">
+    <changeSet id="drughistory-2014-02-12-a" author="jkeiper">
         <preConditions onFail="WARN">
             <not>
-                <tableExists tableName="drughistory_regimen_drug"/>
+                <tableExists tableName="drughistory_drugeventtrigger_question"/>
             </not>
         </preConditions>
         <comment>
-            Creating the drughistory_regimen_drug table
+            Creating the drughistory_drugeventtrigger_question table
         </comment>
-        <createTable tableName="drughistory_regimen_drug">
-            <column name="regimen_id" type="int(11)">
+        <createTable tableName="drughistory_drugeventtrigger_question">
+            <column name="drugeventtrigger_id" type="int(11)">
                 <constraints nullable="false"/>
             </column>
             <column name="concept_id" type="int(11)">
@@ -336,14 +336,109 @@
             </column>
         </createTable>
 
-        <addForeignKeyConstraint constraintName="drughistory_regimen_drug_concept"
-                                 baseTableName="drughistory_regimen_drug" baseColumnNames="concept_id"
+        <addForeignKeyConstraint constraintName="drughistory_drugeventtrigger_question_concept"
+                                 baseTableName="drughistory_drugeventtrigger_question" baseColumnNames="concept_id"
                                  referencedTableName="concept" referencedColumnNames="concept_id"
                 />
-        <addForeignKeyConstraint constraintName="drughistory_regimen_drug_regimen"
-                                 baseTableName="drughistory_regimen_drug" baseColumnNames="regimen_id"
-                                 referencedTableName="drughistory_regimen" referencedColumnNames="regimen_id"
+        <addForeignKeyConstraint constraintName="drughistory_drugeventtrigger_question_trigger"
+                                 baseTableName="drughistory_drugeventtrigger_question" baseColumnNames="drugeventtrigger_id"
+                                 referencedTableName="drughistory_drugeventtrigger" referencedColumnNames="drugeventtrigger_id"
                 />
     </changeSet>
-    
+
+    <changeSet id="drughistory-2014-02-12-b" author="jkeiper">
+        <preConditions onFail="WARN">
+            <not>
+                <tableExists tableName="drughistory_drugeventtrigger_answer"/>
+            </not>
+        </preConditions>
+        <comment>
+            Creating the drughistory_drugeventtrigger_answer table
+        </comment>
+        <createTable tableName="drughistory_drugeventtrigger_answer">
+            <column name="drugeventtrigger_id" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="concept_id" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="drughistory_drugeventtrigger_answer_concept"
+                                 baseTableName="drughistory_drugeventtrigger_answer" baseColumnNames="concept_id"
+                                 referencedTableName="concept" referencedColumnNames="concept_id"
+                />
+        <addForeignKeyConstraint constraintName="drughistory_drugeventtrigger_answer_trigger"
+                                 baseTableName="drughistory_drugeventtrigger_answer" baseColumnNames="drugeventtrigger_id"
+                                 referencedTableName="drughistory_drugeventtrigger" referencedColumnNames="drugeventtrigger_id"
+                />
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-12-c" author="jkeiper">
+        <preConditions onFail="WARN">
+            <foreignKeyConstraintExists foreignKeyName="drughistory_drugeventtrigger_question_ref"/>
+        </preConditions>
+        <comment>
+            Removing foreign-key constraint on question_concept_id column
+        </comment>
+        <dropForeignKeyConstraint constraintName="drughistory_drugevent_question_ref" baseTableName="drughistory_drugeventtrigger"/>
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-12-d" author="jkeiper">
+        <preConditions onFail="WARN">
+            <columnExists tableName="drughistory_drugeventtrigger" columnName="question_concept_id"/>
+        </preConditions>
+        <comment>
+            Removing question_concept_id from trigger table
+        </comment>
+        <dropColumn tableName="drughistory_drugeventtrigger" columnName="question_concept_id"/>
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-12-e" author="jkeiper">
+        <preConditions onFail="WARN">
+            <foreignKeyConstraintExists foreignKeyName="drughistory_drugeventtrigger_answer_ref"/>
+        </preConditions>
+        <comment>
+            Removing foreign-key constraint on answer_concept_id column
+        </comment>
+
+        <dropForeignKeyConstraint constraintName="drughistory_drugevent_answer_ref" baseTableName="drughistory_drugeventtrigger"/>
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-12-f" author="jkeiper">
+        <preConditions onFail="WARN">
+            <columnExists tableName="drughistory_drugeventtrigger" columnName="answer_concept_id"/>
+        </preConditions>
+        <comment>
+            Removing answer_concept_id from trigger table
+        </comment>
+        <dropColumn tableName="drughistory_drugeventtrigger" columnName="answer_concept_id"/>
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-12-g" author="jkeiper">
+        <preConditions onFail="WARN">
+            <columnExists tableName="drughistory_drugevent" columnName="drug_event_type"/>
+        </preConditions>
+        <comment>
+            Updating drug_event_type definition
+        </comment>
+        <modifyColumn tableName="drughistory_drugevent">
+            <column name="drug_event_type" type="char(32)"/>
+        </modifyColumn>
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-12-h" author="jkeiper">
+        <preConditions onFail="WARN">
+            <not>
+                <columnExists tableName="drughistory_drugeventtrigger" columnName="drug_event_type"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding drug_event_type column to drughistory_drugeventtrigger
+        </comment>
+        <addColumn tableName="drughistory_drugeventtrigger">
+            <column name="drug_event_type" type="char(32)"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
