@@ -85,4 +85,9 @@ public interface DrugEventService extends OpenmrsService {
      * @return list of drug events since a given date if not null
      */
     List<DrugEvent> getAllDrugEvents(Date sinceWhen) throws IllegalArgumentException;
+
+	/**
+	 * purges all drug events
+	 */
+	void purgeAllDrugEvents();
 }
