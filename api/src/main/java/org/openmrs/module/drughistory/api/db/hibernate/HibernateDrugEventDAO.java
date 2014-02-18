@@ -107,36 +107,36 @@ public class HibernateDrugEventDAO implements DrugEventDAO {
         return query.executeUpdate();
     }
 
-    @Override
-    public void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen) {
-        if (trigger.getCustomQuery() != null) {
-            Query query = getSessionFactory().getCurrentSession().createQuery(trigger.getCustomQuery());
-            //The query generates and inserts the drug events.
-            query.executeUpdate();
-        } else {
-            Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
-            criteria.add(Restrictions.in("concept", trigger.getQuestions()));
-            if (!trigger.getAnswers().isEmpty()) {
-                criteria.add(Restrictions.eq("valueCoded", trigger.getAnswers()));
-            }
+	@Override
+	public void generateDrugEventsFromTrigger(Person person, DrugEventTrigger trigger, Date sinceWhen) {
+		if (trigger.getCustomQuery() != null) {
+			Query query = getSessionFactory().getCurrentSession().createQuery(trigger.getCustomQuery());
+			//The query generates and inserts the drug events.
+			query.executeUpdate();
+		} else {
+			Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
+			criteria.add(Restrictions.in("concept", trigger.getQuestions()));
+			if (!trigger.getAnswers().isEmpty()) {
+				criteria.add(Restrictions.eq("valueCoded", trigger.getAnswers()));
+			}
             if (person != null) {
                 criteria.add(Restrictions.eq("person", person));
             }
-            if (sinceWhen != null) {
-                criteria.add(Restrictions.ge("obsDatetime", sinceWhen));
-            }
+			if (sinceWhen != null) {
+				criteria.add(Restrictions.ge("obsDatetime", sinceWhen));
+			}
 
-            List<Obs> obsList = criteria.list();
-            //Create drug event for each obs returned and save them.
-            for (Obs obs : obsList) {
-                DrugEvent event = new DrugEvent(obs.getPerson(), obs.getConcept(), obs.getObsDatetime(), trigger.getEventType());
-                event.setEncounter(obs.getEncounter());
-                saveDrugEvent(event);
-            }
-        }
-    }
+			List<Obs> obsList = criteria.list();
+			//Create drug event for each obs returned and save them.
+			for (Obs obs : obsList) {
+				DrugEvent event = new DrugEvent(obs.getPerson(), obs.getConcept(), obs.getObsDatetime(), trigger.getEventType());
+				event.setEncounter(obs.getEncounter());
+				saveDrugEvent(event);
+			}
+		}
+	}
 
-    @Override
+	@Override
     public List<DrugEvent> getAllDrugEvents(Date sinceWhen) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(DrugEvent.class);
         if(sinceWhen != null) {

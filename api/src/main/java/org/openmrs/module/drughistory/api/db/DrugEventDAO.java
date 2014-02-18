@@ -90,13 +90,6 @@ public interface DrugEventDAO {
 
     /**
      *
-     * @param trigger
-     * @param sinceWhen
-     */
-    void generateDrugEventsFromTrigger(DrugEventTrigger trigger, Date sinceWhen);
-
-    /**
-     *
      * @param person
      * @param trigger
      * @param sinceWhen
