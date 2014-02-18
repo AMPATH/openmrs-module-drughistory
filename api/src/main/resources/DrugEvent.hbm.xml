@@ -4,6 +4,12 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
 
 <hibernate-mapping package="org.openmrs.module.drughistory">
+
+    <typedef name="drugEventType" class="org.openmrs.module.drughistory.api.db.hibernate.type.StringEnumType">
+        <param name="enum">org.openmrs.module.drughistory.DrugEventType</param>
+        <param name="defaultValue">CONTINUE</param>
+    </typedef>
+
     <class name="DrugEvent"
            table="${project.parent.artifactId}_drugevent">
         <id name="drugEventId" type="int" column="drugevent_id" unsaved-value="0">
@@ -14,11 +20,7 @@
                   length="38" unique="true"/>
         <property name="dateOccurred" type="java.util.Date" column="date_occurred"/>
 
-        <property name="eventType" column="drug_event_type" not-null="true" length="32">
-            <type name="org.openmrs.util.HibernateEnumType">
-                <param name="enumClassName">org.openmrs.module.drughistory.DrugEventType</param>
-            </type>
-        </property>
+        <property name="eventType" column="drug_event_type" not-null="true" type="drugEventType"/>
 
         <!-- Associations-->
         <many-to-one name="concept" class="org.openmrs.Concept" foreign-key="concept_id"/>
