@@ -17,91 +17,112 @@ import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.Concept;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Created with IntelliJ IDEA.
- * User: willa
- * Date: 1/29/14
- * Time: 3:31 PM
+ * Drug Event Trigger used to generate Drug Events based on certain criteria
  */
-public class DrugEventTrigger extends BaseOpenmrsMetadata implements Serializable{
-    private static final long serialVersionUID = 129823929L;
+public class DrugEventTrigger extends BaseOpenmrsMetadata implements Serializable {
 
-    private Integer drugEventTriggerId;
-    private Concept question;
-    private Concept answer;
-    private Concept eventConcept;
-    private Concept eventReason;
-    private transient String customQuery;
-    private DrugEventType eventType;
+	private static final long serialVersionUID = 129823929L;
 
-    @Override
-    public Integer getId() {
-        return getDrugEventTriggerId();
-    }
+	private Integer drugEventTriggerId;
+	private Set<Concept> questions;
+	private Set<Concept> answers;
+	private Concept eventConcept;
+	private Concept eventReason;
+	private transient String customQuery;
+	private DrugEventType eventType;
 
-    @Override
-    public void setId(Integer drugEventTriggerId) {
-        setDrugEventTriggerId(drugEventTriggerId);
-    }
+	@Override
+	public Integer getId() {
+		return getDrugEventTriggerId();
+	}
 
-    public Integer getDrugEventTriggerId() {
-        return drugEventTriggerId;
-    }
+	@Override
+	public void setId(Integer drugEventTriggerId) {
+		setDrugEventTriggerId(drugEventTriggerId);
+	}
 
-    public void setDrugEventTriggerId(Integer drugEventTriggerId) {
-        this.drugEventTriggerId = drugEventTriggerId;
-    }
+	public Integer getDrugEventTriggerId() {
+		return drugEventTriggerId;
+	}
 
-    public Concept getQuestion() {
-        return question;
-    }
+	public void setDrugEventTriggerId(Integer drugEventTriggerId) {
+		this.drugEventTriggerId = drugEventTriggerId;
+	}
 
-    public void setQuestion(Concept question) {
-        this.question = question;
-    }
+	public Set<Concept> getQuestions() {
+		if (questions == null)
+			questions = new HashSet<Concept>();
+		return questions;
+	}
 
-    public Concept getAnswer() {
-        return answer;
-    }
+	public void setQuestions(Set<Concept> questions) {
+		this.questions = questions;
+	}
 
-    public void setAnswer(Concept answer) {
-        this.answer = answer;
-    }
+	public Set<Concept> getAnswers() {
+		if (answers == null)
+			answers = new HashSet<Concept>();
+		return answers;
+	}
 
-    public Concept getEventConcept() {
-        return eventConcept;
-    }
+	public void setAnswers(Set<Concept> answers) {
+		this.answers = answers;
+	}
 
-    public void setEventConcept(Concept eventConcept) {
-        this.eventConcept = eventConcept;
-    }
+	public Concept getEventConcept() {
+		return eventConcept;
+	}
 
-    public Concept getEventReason() {
-        return eventReason;
-    }
+	public void setEventConcept(Concept eventConcept) {
+		this.eventConcept = eventConcept;
+	}
 
-    public void setEventReason(Concept eventReason) {
-        this.eventReason = eventReason;
-    }
+	public Concept getEventReason() {
+		return eventReason;
+	}
 
-    public String getCustomQuery() {
-        return customQuery;
-    }
+	public void setEventReason(Concept eventReason) {
+		this.eventReason = eventReason;
+	}
 
-    public void setCustomQuery(String customQuery) {
-        this.customQuery = customQuery;
-    }
+	public String getCustomQuery() {
+		return customQuery;
+	}
 
-    public boolean hasCustomQuery() {
-        return customQuery != null;
-    }
+	public void setCustomQuery(String customQuery) {
+		this.customQuery = customQuery;
+	}
 
-    public DrugEventType getEventType() {
-        return eventType;
-    }
+	public boolean hasCustomQuery() {
+		return customQuery != null;
+	}
 
-    public void setEventType(DrugEventType eventType) {
-        this.eventType = eventType;
-    }
+	public DrugEventType getEventType() {
+		return eventType;
+	}
+
+	public void setEventType(DrugEventType eventType) {
+		this.eventType = eventType;
+	}
+
+	public void addQuestion(Concept concept) {
+		this.getQuestions().add(concept);
+	}
+
+	public void addQuestions(Concept... concepts) {
+		this.getQuestions().addAll(Arrays.asList(concepts));
+	}
+
+	public void addAnswer(Concept concept) {
+		this.getAnswers().add(concept);
+	}
+
+	public void addAnswers(Concept... concepts) {
+		this.getAnswers().addAll(Arrays.asList(concepts));
+	}
 }

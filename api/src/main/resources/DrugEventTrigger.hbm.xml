@@ -5,6 +5,11 @@
 
 <hibernate-mapping package="org.openmrs.module.drughistory">
 
+    <typedef name="drugEventType" class="org.openmrs.module.drughistory.api.db.hibernate.type.StringEnumType">
+        <param name="enum">org.openmrs.module.drughistory.DrugEventType</param>
+        <param name="defaultValue">CONTINUE</param>
+    </typedef>
+
     <class name="DrugEventTrigger"
            table="${project.parent.artifactId}_drugeventtrigger">
         <id name="drugEventTriggerId" type="int" column="drugeventtrigger_id" unsaved-value="0">
@@ -20,8 +25,19 @@
         <property name="retireReason" type="java.lang.String" column="retire_reason" length="500"/>
 
         <!-- Associations-->
-        <many-to-one name="question" class="org.openmrs.Concept" foreign-key="question_concept_id"/>
-        <many-to-one name="answer"  class="org.openmrs.Concept" foreign-key="answer_concept_id"/>
+
+        <set name="questions" table="drughistory_drugeventtrigger_question" cascade="delete">
+            <key column="drugeventtrigger_id"/>
+            <many-to-many column="concept_id" class="org.openmrs.Concept"/>
+        </set>
+
+        <set name="answers" table="drughistory_drugeventtrigger_answer" cascade="delete">
+            <key column="drugeventtrigger_id"/>
+            <many-to-many column="concept_id" class="org.openmrs.Concept"/>
+        </set>
+
+        <property name="eventType" column="drug_event_type" not-null="true" type="drugEventType"/>
+
         <many-to-one name="eventConcept" class="org.openmrs.Concept" foreign-key="event_concept_id"/>
         <many-to-one name="eventReason" class="org.openmrs.Concept" foreign-key="event_reason_concept_id"/>
         <many-to-one name="creator" class="org.openmrs.User" foreign-key="created_by"/>

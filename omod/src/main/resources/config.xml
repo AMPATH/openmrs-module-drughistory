@@ -19,18 +19,19 @@
 	<!-- Module Activator -->
 	<activator>${project.parent.groupId}.${project.parent.artifactId}.DrugHistoryActivator</activator>
 	
+	<require_version>1.8.0</require_version>
 	
-	<!-- Adds link to admin page -->
+	<!-- Extensions -->
 	<extension>
 		<point>org.openmrs.admin.list</point>
 		<class>${project.parent.groupId}.${project.parent.artifactId}.extension.html.AdminList</class>
 	</extension>
 	
-	<!-- Maps hibernate file's, if present -->
+	<!-- Maps hibernate files, if present -->
 	<mappingFiles>
-		DrugEvent.hbm.xml
 		Regimen.hbm.xml
-        DrugEventTrigger.hbm.xml
+        DrugEvent.hbm.xml
+		DrugEventTrigger.hbm.xml
 	</mappingFiles>
 
 	<!-- Internationalization -->
