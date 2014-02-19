@@ -110,4 +110,9 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
         }
         return dao.getAllDrugEvents(sinceWhen);
     }
+
+	@Override
+	public void purgeAllDrugEvents() {
+		dao.purgeAllDrugEvents();
+	}
 }
