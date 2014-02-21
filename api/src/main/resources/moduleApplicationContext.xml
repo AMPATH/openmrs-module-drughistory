@@ -79,4 +79,29 @@
         </property>
     </bean>
 
+    <bean parent="serviceContext">
+        <property name="moduleService">
+            <list>
+                <value>${project.parent.groupId}.${project.parent.artifactId}.api.DrugSnapshotService</value>
+                <bean
+                        class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+                    <property name="transactionManager" ref="transactionManager"/>
+                    <property name="target">
+                        <bean class="${project.parent.groupId}.${project.parent.artifactId}.api.impl.DrugSnapshotServiceImpl">
+                            <property name="dao">
+                                <bean class="${project.parent.groupId}.${project.parent.artifactId}.api.db.hibernate.HibernateDrugSnapshotDAO">
+                                    <property name="sessionFactory" ref="sessionFactory"/>
+                                </bean>
+                            </property>
+                        </bean>
+                    </property>
+                    <property name="preInterceptors" ref="serviceInterceptors"/>
+                    <property name="transactionAttributeSource">
+                        <bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource" />
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
 </beans>
