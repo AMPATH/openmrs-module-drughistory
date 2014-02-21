@@ -66,12 +66,14 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
 
 	@Override
 	public void generateAllDrugEvents(Person person, Date sinceWhen) {
-		if (sinceWhen != null && sinceWhen.compareTo(new Date()) > 0) {
+		if (sinceWhen != null) {
+			if (sinceWhen.compareTo(new Date()) > 0) {
 				throw new IllegalArgumentException("Date: " + sinceWhen + " should be greater than the date of today");
-		}
-		List<DrugEventTrigger> triggers = getAllDrugEventTriggers(false);
-		for (DrugEventTrigger t : triggers) {
-			generateDrugEventsFromTrigger(person, t, sinceWhen);
+			} else {
+
+			}
+		} else {
+			//All drug events.
 		}
 	}
 
@@ -118,5 +120,10 @@ public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEven
 	@Override
 	public List<DrugEvent> getDrugEvents(Properties params) {
 		return dao.getDrugEvents(params);
+	}
+
+	@Override
+	public void purgeAllDrugEvents() {
+		dao.purgeAllDrugEvents();
 	}
 }

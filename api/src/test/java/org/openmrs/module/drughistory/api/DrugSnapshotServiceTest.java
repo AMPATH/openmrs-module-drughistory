@@ -25,7 +25,6 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -192,8 +191,8 @@ public class DrugSnapshotServiceTest extends BaseModuleContextSensitiveTest {
 		// test drugs param
 
 		Concept c = Context.getConceptService().getConcept(792);
-		Set<Integer> drugs = new HashSet<Integer>();
-		drugs.add(792);
+		Set<Concept> drugs = new HashSet<Concept>();
+		drugs.add(c);
 
 		Properties params = new Properties();
 		params.put("drugs", drugs);

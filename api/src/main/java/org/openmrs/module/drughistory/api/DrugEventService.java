@@ -24,14 +24,6 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * This service exposes module's core functionality. It is a Spring managed bean which is configured in moduleApplicationContext.xml.
- * <p/>
- * It can be accessed only via Context:<br>
- * <code>
- * Context.getService(DrugEventService.class).someMethod();
- * </code>
- *
- * @see org.openmrs.api.context.Context
  */
 @Transactional
 public interface DrugEventService extends OpenmrsService {
@@ -93,8 +85,13 @@ public interface DrugEventService extends OpenmrsService {
 	List<DrugEvent> getAllDrugEvents(Date sinceWhen) throws IllegalArgumentException;
 
 	/**
-	 * returns a list of DrugEvents based on given params
 	 */
 	@Transactional(readOnly = true)
-	List<DrugEvent> getDrugEvents(Properties params);
+	List<DrugEvent> getDrugEvents(Properties params) throws IllegalArgumentException;
+
+	/**
+	 * purges all drug events
+	 */
+	@Transactional(readOnly = false)
+	void purgeAllDrugEvents();
 }
