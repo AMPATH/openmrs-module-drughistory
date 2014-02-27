@@ -13,6 +13,7 @@
  */
 package org.openmrs.module.drughistory.api.db.hibernate;
 
+import liquibase.util.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
@@ -20,18 +21,24 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.Cohort;
 import org.openmrs.Encounter;
-import org.openmrs.Obs;
 import org.openmrs.Person;
+import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.module.drughistory.DrugEventTrigger;
 import org.openmrs.module.drughistory.api.db.DrugEventDAO;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.UUID;
 
 /**
  * It is a default implementation of  {@link DrugEventDAO}.
@@ -115,40 +122,95 @@ public class HibernateDrugEventDAO implements DrugEventDAO {
 
 	@Override
 	public void generateDrugEventsFromTrigger(Person person, DrugEventTrigger trigger, Date sinceWhen) {
+		Query query;
+
 		if (trigger.getCustomQuery() != null) {
-			Query query = getSessionFactory().getCurrentSession().createQuery(trigger.getCustomQuery());
+
 			//The query generates and inserts the drug events.
+			query = getSessionFactory().getCurrentSession().createSQLQuery(trigger.getCustomQuery());
 			query.executeUpdate();
-		} else {
-			Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Obs.class);
-			criteria.add(Restrictions.in("concept", trigger.getQuestions()));
-			if (!trigger.getAnswers().isEmpty()) {
-				criteria.add(Restrictions.in("valueCoded", trigger.getAnswers()));
-			}
-			if (person != null) {
-				criteria.add(Restrictions.eq("person", person));
-			}
-			if (sinceWhen != null) {
-				criteria.add(Restrictions.ge("obsDatetime", sinceWhen));
-			}
 
-			List<Obs> obsList = criteria.list();
-			List<DrugEvent> events = new ArrayList<DrugEvent>();
+			return;
+		}
 
-			//Create drug event for each obs returned and save them.
-			for (Obs obs : obsList) {
-				DrugEvent event = new DrugEvent();
-				event.setPerson(obs.getPerson());
-				event.setEncounter(obs.getEncounter());
-				event.setConcept(trigger.getEventConcept());
-				event.setReason(trigger.getEventReason());
-				event.setDateOccurred(obs.getObsDatetime());
-				event.setEventType(trigger.getEventType());
-				events.add(event);
+		String sql = "SELECT person_id, encounter_id, obs_datetime" +
+				" FROM obs o" +
+				" where o.concept_id in (:conceptList)";
+
+		Map<String, Object> m = new HashMap<String, Object>();
+		m.put("conceptList", trigger.getQuestions());
+
+		if (!trigger.getAnswers().isEmpty()) {
+			sql += " and o.value_coded in (:answerList)";
+			m.put("answerList", trigger.getAnswers());
+		}
+
+		if (person != null) {
+			sql += " and o.person_id = :personId";
+			m.put("personId", person);
+		}
+
+		if (sinceWhen != null) {
+			sql += " and o.obs_datetime >= :sinceWhen";
+			m.put("sinceWhen", sinceWhen);
+		}
+
+		query = sessionFactory.getCurrentSession().createSQLQuery(sql);
+		mapIntoQuery(query, m);
+
+		List<Object[]> obsList = query.list();
+
+		//Create drug event for each obs returned and save them.
+
+		String insertPrefix = "INSERT INTO drughistory_drugevent" +
+				" (person_id, encounter_id, concept_id, concept_reason_id, date_occurred, drug_event_type, uuid)" +
+				" VALUES ";
+		List<String> inserts = new ArrayList<String>();
+
+		int i = 0;
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+		for (Object[] ob : obsList) {
+
+			Integer personId = (Integer) ob[0];
+			Integer encounterId = (Integer) ob[1];
+			Date dateOccurred = (Date) ob[2];
+
+			List<String> parts = new ArrayList<String>();
+			parts.add(personId == null ? "NULL" : personId.toString());
+			parts.add(encounterId == null ? "NULL" : encounterId.toString());
+			parts.add(trigger.getEventConcept() == null ? "NULL" : trigger.getEventConcept().getId().toString());
+			parts.add(trigger.getEventReason() == null ? "NULL" : trigger.getEventReason().getId().toString());
+			parts.add(dateOccurred == null ? "NULL" : "'" + sdf.format(dateOccurred) + "'");
+			parts.add("'" + (trigger.getEventType() == null ? "NULL" : trigger.getEventType().getValue()) + "'");
+			parts.add("'" + UUID.randomUUID().toString() + "'");
+
+			inserts.add("(" + StringUtils.join(parts, ", ") + ")");
+
+			if (i++ > 1000) {
+				String insertStatement = insertPrefix + StringUtils.join(inserts, ",");
+				sessionFactory.getCurrentSession().createSQLQuery(insertStatement).executeUpdate();
+				i = 0;
+				inserts.clear();
 			}
+		}
 
-			if (!events.isEmpty()) {
-				saveDrugEvents(events, 1000);
+		if (!inserts.isEmpty()) {
+			String insertStatement = insertPrefix + StringUtils.join(inserts, ",");
+			sessionFactory.getCurrentSession().createSQLQuery(insertStatement).executeUpdate();
+		}
+	}
+
+	private void mapIntoQuery(Query q, Map<String, Object> parameterValues) {
+		for (Map.Entry<String, Object> e : parameterValues.entrySet()) {
+			if (e.getValue() instanceof Collection) {
+				q.setParameterList(e.getKey(), (Collection) e.getValue());
+			} else if (e.getValue() instanceof Object[]) {
+				q.setParameterList(e.getKey(), (Object[]) e.getValue());
+			} else if (e.getValue() instanceof Cohort) {
+				q.setParameterList(e.getKey(), ((Cohort) e.getValue()).getMemberIds());
+			} else {
+				q.setParameter(e.getKey(), e.getValue());
 			}
 		}
 	}
