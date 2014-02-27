@@ -17,10 +17,15 @@ package org.openmrs.module.drughistory.api.db.hibernate;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.Concept;
 import org.openmrs.module.drughistory.Regimen;
 import org.openmrs.module.drughistory.api.db.RegimenDAO;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
+import java.util.Set;
 
 public class HibernateRegimenDAO implements RegimenDAO {
 
@@ -56,5 +61,44 @@ public class HibernateRegimenDAO implements RegimenDAO {
 	@Override
 	public void purgeRegimen(Regimen regimen) {
 		sessionFactory.getCurrentSession().delete(regimen);
+	}
+
+	@Override
+	public List<Regimen> getRegimens(Properties params) {
+		if (params == null) {
+			params = new Properties();
+		}
+
+		Criteria c = sessionFactory.getCurrentSession().createCriteria(Regimen.class);
+
+//		if (params.containsKey("drugs") && params.get("drugs") instanceof Set) {
+//			// only get regimens related to these drugs
+//			Set<Integer> drugIds = new HashSet<Integer>();
+//			for (Concept concept : (Set<Concept>) params.get("drugs")) {
+//				drugIds.add(concept.getConceptId());
+//			}
+//			c.createAlias("drugs", "ack");
+//			c.add(Restrictions.in("ack.conceptId", drugIds));
+//		}
+
+		List<Regimen> regimens = (List<Regimen>) c.list();
+
+		if (params.containsKey("drugs") && params.get("drugs") instanceof Set) {
+			// only get regimens related to these drugs
+			Set<Concept> drugs = (Set<Concept>) params.get("drugs");
+			List<Regimen> res = new ArrayList<Regimen>();
+
+			for (Regimen r : regimens) {
+				// if the drugs in the regimen are all contained in the incoming parameter ...
+				Set<Concept> s = new HashSet<Concept>(r.getDrugs());
+				if (!s.retainAll(drugs)) {
+					// we have a match!
+					res.add(r);
+				}
+			}
+			return res;
+		}
+
+		return regimens;
 	}
 }

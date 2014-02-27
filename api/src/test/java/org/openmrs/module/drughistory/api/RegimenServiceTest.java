@@ -16,16 +16,22 @@ package org.openmrs.module.drughistory.api;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.openmrs.Concept;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.drughistory.DrugSnapshot;
 import org.openmrs.module.drughistory.Regimen;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.springframework.test.annotation.ExpectedException;
 
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class RegimenServiceTest extends BaseModuleContextSensitiveTest {
 	/**
@@ -287,5 +293,45 @@ public class RegimenServiceTest extends BaseModuleContextSensitiveTest {
 	@ExpectedException(APIException.class)
 	public void purgeRegimen_shouldThrowAnAPIExceptionIfRegimenIsNull() throws Exception {
 		Context.getService(RegimenService.class).purgeRegimen(null);
+	}
+
+	/**
+	 * @verifies only return regimens matching drugs in the snapshot
+	 * @see RegimenService#getRegimensFromSnapshot(org.openmrs.module.drughistory.DrugSnapshot)
+	 */
+	@Test
+	public void getRegimensFromSnapshot_shouldOnlyReturnRegimensMatchingDrugsInTheSnapshot() throws Exception {
+		Set<Concept> drugs = new HashSet<Concept>();
+		drugs.add(Context.getConceptService().getConcept(3));
+		drugs.add(Context.getConceptService().getConcept(88));
+		drugs.add(Context.getConceptService().getConcept(792));
+
+		Context.getService(RegimenService.class).saveRegimen(
+				new Regimen("A", "A Desc", Regimen.LINE_FIRST, Regimen.AGE_ADULT, new HashSet<Concept>(drugs)));
+
+		drugs.clear();
+		drugs.add(Context.getConceptService().getConcept(11));
+		drugs.add(Context.getConceptService().getConcept(12));
+		drugs.add(Context.getConceptService().getConcept(13));
+
+		Context.getService(RegimenService.class).saveRegimen(
+				new Regimen("B", "B Desc", Regimen.LINE_FIRST, Regimen.AGE_ADULT, new HashSet<Concept>(drugs)));
+
+		drugs.clear();
+		drugs.add(Context.getConceptService().getConcept(3));
+		drugs.add(Context.getConceptService().getConcept(88));
+		drugs.add(Context.getConceptService().getConcept(13));
+
+		Context.getService(RegimenService.class).saveRegimen(
+				new Regimen("C", "C Desc", Regimen.LINE_FIRST, Regimen.AGE_ADULT, new HashSet<Concept>(drugs)));
+
+		DrugSnapshot ds = new DrugSnapshot();
+		ds.setConcepts(new HashSet<Concept>(drugs));
+
+		List<Regimen> actual = Context.getService(RegimenService.class).getRegimensFromSnapshot(ds);
+
+		assertNotNull(actual);
+		assertEquals(1, actual.size());
+		assertEquals("C", actual.get(0).getName());
 	}
 }

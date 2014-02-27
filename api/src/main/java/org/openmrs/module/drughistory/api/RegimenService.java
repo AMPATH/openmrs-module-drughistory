@@ -14,6 +14,7 @@
 
 package org.openmrs.module.drughistory.api;
 
+import org.openmrs.module.drughistory.DrugSnapshot;
 import org.openmrs.module.drughistory.Regimen;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +44,18 @@ public interface RegimenService {
 	 * @should return a persisted regimen if found
 	 * @should return null if the persisted regimen is not found
 	 */
-	@Transactional(readOnly = false)
+	@Transactional(readOnly = true)
 	public Regimen getRegimen(Integer regimenId);
+
+	/**
+	 * Returns a list of possible regimens from the drugs in a snapshot
+	 *
+	 * @param snapshot the snapshot to reference for drugs
+	 * @return the matching regimens
+	 * @should only return regimens matching drugs in the snapshot
+	 */
+	@Transactional(readOnly = true)
+	public List<Regimen> getRegimensFromSnapshot(DrugSnapshot snapshot);
 
 	/**
 	 * Persists a regimen to the database.  If the regimen already exists, it is updated.
