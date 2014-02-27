@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.UUID;
 
 public class DrugSnapshotServiceImpl extends BaseOpenmrsService implements DrugSnapshotService {
 
@@ -90,10 +91,18 @@ public class DrugSnapshotServiceImpl extends BaseOpenmrsService implements DrugS
 					} else if (de.getEventType() == DrugEventType.STOP) {
 						s.removeConcept(de.getConcept());
 					}
+
+					// the snapshot's encounter will be the one from the last-added observation
+					s.setEncounter(de.getEncounter());
 				}
 
 				// add a copy to snapshots, since we want to reuse this one
-				snapshots.add(s.copy());
+				DrugSnapshot ds = s.copy();
+
+				// ... and give it a UUID
+				ds.setUuid(UUID.randomUUID().toString());
+
+				snapshots.add(ds);
 			}
 
 			// save and clear snapshots
