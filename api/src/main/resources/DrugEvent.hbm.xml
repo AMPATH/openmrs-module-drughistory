@@ -23,10 +23,10 @@
         <property name="eventType" column="drug_event_type" not-null="true" type="drugEventType"/>
 
         <!-- Associations-->
-        <many-to-one name="concept" class="org.openmrs.Concept" foreign-key="concept_id"/>
-        <many-to-one name="reason"  class="org.openmrs.Concept" foreign-key="concept_reason_id"/>
-        <many-to-one name="encounter" class="org.openmrs.Encounter" foreign-key="encounter_id"/>
-        <many-to-one name="person" class="org.openmrs.Person" foreign-key="person_id"/>
+        <many-to-one name="concept" column="concept_id" class="org.openmrs.Concept" foreign-key="concept_id"/>
+        <many-to-one name="reason" column="concept_reason_id" class="org.openmrs.Concept" foreign-key="concept_reason_id"/>
+        <many-to-one name="encounter" column="encounter_id" class="org.openmrs.Encounter" foreign-key="encounter_id"/>
+        <many-to-one name="person" column="person_id" class="org.openmrs.Person" foreign-key="person_id"/>
     </class>
 
 </hibernate-mapping>
