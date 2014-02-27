@@ -19,7 +19,8 @@
             <many-to-many column="concept_id" class="org.openmrs.Concept"/>
         </set>
 
-        <many-to-one name="person" class="org.openmrs.Person" foreign-key="person_id"/>
+        <many-to-one name="person" column="person_id" class="org.openmrs.Person" foreign-key="person_id"/>
+        <many-to-one name="encounter" column="encounter_id" class="org.openmrs.Encounter" foreign-key="encounter_id"/>
 
         <property name="uuid" type="java.lang.String" column="uuid"
                   length="38" unique="true"/>

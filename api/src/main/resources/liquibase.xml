@@ -497,4 +497,36 @@
                 />
     </changeSet>
 
+    <changeSet id="drughistory-2014-02-23-a" author="jkeiper">
+        <preConditions onFail="WARN">
+            <not>
+                <columnExists tableName="drughistory_drugsnapshot" columnName="encounter_id"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding encounter_id column to drughistory_drugsnapshot
+        </comment>
+        <addColumn tableName="drughistory_drugsnapshot">
+            <column name="encounter_id" type="int"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-23-b" author="jkeiper">
+        <preConditions onFail="WARN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="drughistory_drugsnapshot_encounter_ref"/>
+            </not>
+        </preConditions>
+        <comment>
+            Adding foreign-key constraint on encounter_id column to drugsnapshot table
+        </comment>
+
+        <addForeignKeyConstraint
+                constraintName="drughistory_drugsnapshot_encounter_ref"
+                baseTableName="drughistory_drugsnapshot"
+                baseColumnNames="encounter_id"
+                referencedTableName="encounter"
+                referencedColumnNames="encounter_id"/>
+    </changeSet>
+
 </databaseChangeLog>
