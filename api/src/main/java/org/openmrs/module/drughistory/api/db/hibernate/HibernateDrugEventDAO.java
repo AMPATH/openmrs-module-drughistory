@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
@@ -30,6 +31,7 @@ import org.openmrs.module.drughistory.api.db.DrugEventDAO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * It is a default implementation of  {@link DrugEventDAO}.
@@ -152,11 +154,24 @@ public class HibernateDrugEventDAO implements DrugEventDAO {
 	}
 
 	@Override
-	public List<DrugEvent> getAllDrugEvents(Date sinceWhen) {
-		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(DrugEvent.class);
-		if (sinceWhen != null) {
-			criteria.add(Restrictions.ge("dateOccurred", sinceWhen));
+	public List<DrugEvent> getDrugEvents(Properties params) {
+
+		if (params == null) {
+			params = new Properties();
 		}
+
+		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(DrugEvent.class);
+
+		if (params.containsKey("person")) {
+			criteria.add(Restrictions.eq("person", params.get("person")));
+		}
+
+		if (params.containsKey("since")) {
+			criteria.add(Restrictions.ge("dateOccurred", params.get("since")));
+		}
+
+		criteria.addOrder(Order.asc("dateOccurred"));
+
 		return criteria.list();
 	}
 }

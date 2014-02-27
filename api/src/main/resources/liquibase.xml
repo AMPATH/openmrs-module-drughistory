@@ -441,4 +441,60 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="drughistory-2014-02-18-a" author="jkeiper">
+        <preConditions onFail="WARN">
+            <not>
+                <tableExists tableName="drughistory_drugsnapshot"/>
+            </not>
+        </preConditions>
+        <comment>
+            Creating the drughistory_drugsnapshot table
+        </comment>
+        <createTable tableName="drughistory_drugsnapshot">
+            <column name="drugsnapshot_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="person_id" type="int(11)" />
+            <column name="date_taken" type="datetime" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="uuid" type="char(38)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="drughistory_drugsnapshot_person"
+                                 baseTableName="drughistory_drugsnapshot" baseColumnNames="person_id"
+                                 referencedTableName="person" referencedColumnNames="person_id"
+                />
+    </changeSet>
+
+    <changeSet id="drughistory-2014-02-18-b" author="jkeiper">
+        <preConditions onFail="WARN">
+            <not>
+                <tableExists tableName="drughistory_drugsnapshot_concept"/>
+            </not>
+        </preConditions>
+        <comment>
+            Creating the drughistory_drugsnapshot_concept table
+        </comment>
+        <createTable tableName="drughistory_drugsnapshot_concept">
+            <column name="drugsnapshot_id" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="concept_id" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="drughistory_drugsnapshot_concept_concept"
+                                 baseTableName="drughistory_drugsnapshot_concept" baseColumnNames="concept_id"
+                                 referencedTableName="concept" referencedColumnNames="concept_id"
+                />
+        <addForeignKeyConstraint constraintName="drughistory_drugsnapshot_concept_snapshot"
+                                 baseTableName="drughistory_drugsnapshot_concept" baseColumnNames="drugsnapshot_id"
+                                 referencedTableName="drughistory_drugsnapshot" referencedColumnNames="drugsnapshot_id"
+                />
+    </changeSet>
+
 </databaseChangeLog>

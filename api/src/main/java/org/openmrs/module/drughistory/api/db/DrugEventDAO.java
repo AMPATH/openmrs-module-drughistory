@@ -23,6 +23,7 @@ import org.openmrs.module.drughistory.api.DrugEventService;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 /**
  *  Database methods for {@link DrugEventService}.
@@ -96,10 +97,5 @@ public interface DrugEventDAO {
      */
     void generateDrugEventsFromTrigger(Person person,DrugEventTrigger trigger,Date sinceWhen);
 
-    /**
-     *
-     * @param sinceWhen
-     * @return list of DrugEvents since a given date if not null
-     */
-    List<DrugEvent> getAllDrugEvents(Date sinceWhen);
+	List<DrugEvent> getDrugEvents(Properties params);
 }

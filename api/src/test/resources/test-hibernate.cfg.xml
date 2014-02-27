@@ -8,5 +8,6 @@
         <mapping resource="Regimen.hbm.xml"/>
         <mapping resource="DrugEvent.hbm.xml"/>
         <mapping resource="DrugEventTrigger.hbm.xml"/>
+        <mapping resource="DrugSnapshot.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>

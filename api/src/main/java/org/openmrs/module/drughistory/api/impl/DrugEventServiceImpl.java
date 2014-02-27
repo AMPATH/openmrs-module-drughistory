@@ -13,11 +13,10 @@
  */
 package org.openmrs.module.drughistory.api.impl;
 
-import org.openmrs.Patient;
-import org.openmrs.Person;
-import org.openmrs.api.impl.BaseOpenmrsService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Person;
+import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.module.drughistory.DrugEvent;
 import org.openmrs.module.drughistory.DrugEventTrigger;
 import org.openmrs.module.drughistory.api.DrugEventService;
@@ -26,90 +25,102 @@ import org.openmrs.module.drughistory.api.db.DrugEventTriggerDAO;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * It is a default implementation of {@link DrugEventService}.
  */
 public class DrugEventServiceImpl extends BaseOpenmrsService implements DrugEventService {
 
-    protected final Log log = LogFactory.getLog(this.getClass());
+	protected final Log log = LogFactory.getLog(this.getClass());
 
-    private DrugEventDAO dao;
-    private DrugEventTriggerDAO triggerDAO;
+	private DrugEventDAO dao;
+	private DrugEventTriggerDAO triggerDAO;
 
-    /**
-     * @param dao the dao to set
-     */
-    public void setDao(DrugEventDAO dao) {
-        this.dao = dao;
-    }
+	/**
+	 * @param dao the dao to set
+	 */
+	public void setDao(DrugEventDAO dao) {
+		this.dao = dao;
+	}
 
-    /**
-     * @return the dao
-     */
-    public DrugEventDAO getDao() {
-        return dao;
-    }
+	/**
+	 * @return the dao
+	 */
+	public DrugEventDAO getDao() {
+		return dao;
+	}
 
-    public DrugEventTriggerDAO getTriggerDAO() {
-        return triggerDAO;
-    }
+	public DrugEventTriggerDAO getTriggerDAO() {
+		return triggerDAO;
+	}
 
-    public void setTriggerDAO(DrugEventTriggerDAO triggerDAO) {
-        this.triggerDAO = triggerDAO;
-    }
+	public void setTriggerDAO(DrugEventTriggerDAO triggerDAO) {
+		this.triggerDAO = triggerDAO;
+	}
 
-    @Override
-    public void generateAllDrugEvents(final Date sinceWhen) {
-        generateAllDrugEvents(null,sinceWhen);
-    }
+	@Override
+	public void generateAllDrugEvents(final Date sinceWhen) {
+		generateAllDrugEvents(null, sinceWhen);
+	}
 
-    @Override
-    public void generateAllDrugEvents(Person person, Date sinceWhen) {
-        if (sinceWhen != null) {
-            if (sinceWhen.compareTo(new Date()) > 0) {
-                throw new IllegalArgumentException("Date: " + sinceWhen + " should be greater than the date of today");
-            } else {
+	@Override
+	public void generateAllDrugEvents(Person person, Date sinceWhen) {
+		if (sinceWhen != null) {
+			if (sinceWhen.compareTo(new Date()) > 0) {
+				throw new IllegalArgumentException("Date: " + sinceWhen + " should be greater than the date of today");
+			} else {
 
-            }
-        } else {
-            //All drug events.
-        }
-    }
-
-
-    @Override
-    public void generateDrugEventsFromTrigger(final DrugEventTrigger trigger, final Date sinceWhen) {
-        generateDrugEventsFromTrigger(null,trigger,sinceWhen);
-    }
-
-    @Override
-    public void generateDrugEventsFromTrigger(final Person person, final DrugEventTrigger trigger, final Date sinceWhen) {
-        if(trigger == null) {
-            throw  new IllegalArgumentException("trigger cannot be null");
-        }
-        if(trigger.getEventType() == null) {
-            throw new IllegalArgumentException("Trigger's eventType can not be null");
-        }
-        if (sinceWhen != null && sinceWhen.compareTo(new Date()) > 0) {
-            throw new IllegalArgumentException("Date: " + sinceWhen + " should be earlier than or equal to today");
-        }
-        dao.generateDrugEventsFromTrigger(person,trigger,sinceWhen);
-    }
+			}
+		} else {
+			//All drug events.
+		}
+	}
 
 
-    @Override
-    public List<DrugEventTrigger> getAllDrugEventTriggers(Boolean includeRetired) {
-        return triggerDAO.getAllDrugEventTriggers(includeRetired);
-    }
+	@Override
+	public void generateDrugEventsFromTrigger(final DrugEventTrigger trigger, final Date sinceWhen) {
+		generateDrugEventsFromTrigger(null, trigger, sinceWhen);
+	}
 
-    @Override
-    public List<DrugEvent> getAllDrugEvents(Date sinceWhen){
-        if (sinceWhen != null && sinceWhen.compareTo(new Date()) > 0) {
-            throw new IllegalArgumentException("Date: " + sinceWhen + " should be earlier than or equal to today");
-        }
-        return dao.getAllDrugEvents(sinceWhen);
-    }
+	@Override
+	public void generateDrugEventsFromTrigger(final Person person, final DrugEventTrigger trigger, final Date sinceWhen) {
+		if (trigger == null) {
+			throw new IllegalArgumentException("trigger cannot be null");
+		}
+		if (trigger.getEventType() == null) {
+			throw new IllegalArgumentException("Trigger's eventType can not be null");
+		}
+		if (sinceWhen != null && sinceWhen.compareTo(new Date()) > 0) {
+			throw new IllegalArgumentException("Date: " + sinceWhen + " should be earlier than or equal to today");
+		}
+		dao.generateDrugEventsFromTrigger(person, trigger, sinceWhen);
+	}
+
+
+	@Override
+	public List<DrugEventTrigger> getAllDrugEventTriggers(Boolean includeRetired) {
+		return triggerDAO.getAllDrugEventTriggers(includeRetired);
+	}
+
+	@Override
+	public List<DrugEvent> getAllDrugEvents(Date sinceWhen) {
+		if (sinceWhen != null && sinceWhen.compareTo(new Date()) > 0) {
+			throw new IllegalArgumentException("Date: " + sinceWhen + " should be earlier than or equal to today");
+		}
+
+		Properties params = new Properties();
+		if (sinceWhen != null) {
+			params.put("since", sinceWhen);
+		}
+
+		return dao.getDrugEvents(params);
+	}
+
+	@Override
+	public List<DrugEvent> getDrugEvents(Properties params) {
+		return dao.getDrugEvents(params);
+	}
 
 	@Override
 	public void purgeAllDrugEvents() {
