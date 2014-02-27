@@ -20,6 +20,7 @@ import org.openmrs.Concept;
 import org.openmrs.api.APIException;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
+import org.openmrs.module.drughistory.DrugSnapshot;
 import org.openmrs.module.drughistory.Regimen;
 import org.openmrs.module.drughistory.api.RegimenService;
 import org.openmrs.module.drughistory.api.db.RegimenDAO;
@@ -27,6 +28,7 @@ import org.openmrs.module.drughistory.api.db.RegimenDAO;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Properties;
 
 public class RegimenServiceImpl extends BaseOpenmrsService implements RegimenService {
 
@@ -49,6 +51,13 @@ public class RegimenServiceImpl extends BaseOpenmrsService implements RegimenSer
 	@Override
 	public Regimen getRegimen(Integer artRegimenId) {
 		return dao.getRegimen(artRegimenId);
+	}
+
+	@Override
+	public List<Regimen> getRegimensFromSnapshot(DrugSnapshot snapshot) {
+		Properties params = new Properties();
+		params.put("drugs", snapshot.getConcepts());
+		return dao.getRegimens(params);
 	}
 
 	@Override

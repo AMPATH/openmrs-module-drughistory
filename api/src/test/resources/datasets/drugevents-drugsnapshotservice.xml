@@ -1,13 +1,11 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-
-    <drughistory_drugevent drugevent_id="1" person="2" concept="792" date_occurred="1975-10-16 00:00:00.0" drug_event_type="START" uuid="a8967156-1350-11df-a1f1-0026b9348838"/>
-    <drughistory_drugevent drugevent_id="2" person="2" concept="88" date_occurred="1975-10-16 00:00:00.0" drug_event_type="START" uuid="a8967156-1351-11df-a1f1-0026b9348838"/>
-    <drughistory_drugevent drugevent_id="3" person="2" concept="792" date_occurred="1975-10-17 00:00:00.0" drug_event_type="CONTINUE" uuid="a8967156-1352-11df-a1f1-0026b9348838"/>
-    <drughistory_drugevent drugevent_id="4" person="2" concept="88" date_occurred="1975-10-17 00:00:00.0" drug_event_type="STOP" uuid="a8967156-1353-11df-a1f1-0026b9348838"/>
-    <drughistory_drugevent drugevent_id="5" person="2" concept="792" date_occurred="1975-10-18 00:00:00.0" drug_event_type="STOP" uuid="a8967156-1354-11df-a1f1-0026b9348838"/>
-
-    <drughistory_drugevent drugevent_id="6" person="1" concept="792" date_occurred="1975-10-17 00:00:00.0" drug_event_type="CONTINUE" uuid="a8967156-1355-11df-a1f1-0026b9348838"/>
-    <drughistory_drugevent drugevent_id="7" person="1" concept="88" date_occurred="1975-10-17 00:00:00.0" drug_event_type="STOP" uuid="a8967156-1356-11df-a1f1-0026b9348838"/>
-    <drughistory_drugevent drugevent_id="8" person="1" concept="792" date_occurred="1975-10-18 00:00:00.0" drug_event_type="START" uuid="a8967156-1357-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="1" person_id="2" concept_id="792" date_occurred="1975-10-16 00:00:00.0" drug_event_type="START" uuid="a8967156-1350-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="2" person_id="2" concept_id="88" date_occurred="1975-10-16 00:00:00.0" drug_event_type="START" uuid="a8967156-1351-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="3" person_id="2" concept_id="792" date_occurred="1975-10-17 00:00:00.0" drug_event_type="CONTINUE" uuid="a8967156-1352-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="4" person_id="2" concept_id="88" date_occurred="1975-10-17 00:00:00.0" drug_event_type="STOP" uuid="a8967156-1353-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="5" person_id="2" concept_id="792" date_occurred="1975-10-18 00:00:00.0" drug_event_type="STOP" uuid="a8967156-1354-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="6" person_id="1" concept_id="792" date_occurred="1975-10-17 00:00:00.0" drug_event_type="CONTINUE" uuid="a8967156-1355-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="7" person_id="1" concept_id="88" date_occurred="1975-10-17 00:00:00.0" drug_event_type="STOP" uuid="a8967156-1356-11df-a1f1-0026b9348838"/>
+    <drughistory_drugevent drugevent_id="8" person_id="1" concept_id="792" date_occurred="1975-10-18 00:00:00.0" drug_event_type="START" uuid="a8967156-1357-11df-a1f1-0026b9348838"/>
 </dataset>

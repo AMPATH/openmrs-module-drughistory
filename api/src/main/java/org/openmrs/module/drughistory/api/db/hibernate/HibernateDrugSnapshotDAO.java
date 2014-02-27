@@ -21,12 +21,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.module.drughistory.DrugSnapshot;
 import org.openmrs.module.drughistory.api.db.DrugSnapshotDAO;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -58,6 +60,11 @@ public class HibernateDrugSnapshotDAO implements DrugSnapshotDAO {
 		Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(DrugSnapshot.class);
 
 		if (params != null) {
+			if (params.containsKey("cohort") && params.get("cohort") instanceof Cohort) {
+				// only retrieve snapshots for these person Ids
+				Cohort cohort = (Cohort) params.get("cohort");
+				criteria.add(Restrictions.in("person.personId", cohort.getMemberIds()));
+			}
 			if (params.containsKey("drugs") && params.get("drugs") instanceof Set) {
 				// only get back snapshots related to these drugs
 				Set<Integer> drugIds = new HashSet<Integer>();
@@ -67,12 +74,6 @@ public class HibernateDrugSnapshotDAO implements DrugSnapshotDAO {
 				criteria.createAlias("concepts", "ack");
 				criteria.add(Restrictions.in("ack.conceptId", drugIds));
 			}
-//			if (params.containsKey("atLeast")) {
-//				// require at least this many drugs in a given snapshot
-//				criteria.createAlias("concepts", "foo");
-//				criteria.setProjection(Projections.projectionList().add(Projections.count("foo.conceptId"), "drugCount"));
-//				criteria.add(Restrictions.ge("drugCount", params.get("atLeast")));
-//			}
 		}
 
 		return criteria.list();

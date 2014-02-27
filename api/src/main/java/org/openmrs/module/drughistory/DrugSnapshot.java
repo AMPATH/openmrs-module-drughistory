@@ -16,6 +16,7 @@ package org.openmrs.module.drughistory;
 
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Concept;
+import org.openmrs.Encounter;
 import org.openmrs.Person;
 
 import java.util.Date;
@@ -26,6 +27,7 @@ public class DrugSnapshot extends BaseOpenmrsObject {
 
 	private Integer drugSnapshotId;
 	private Person person;
+	private Encounter encounter;
 	private Set<Concept> concepts;
 	private Date dateTaken;
 
@@ -53,6 +55,14 @@ public class DrugSnapshot extends BaseOpenmrsObject {
 
 	public void setPerson(Person person) {
 		this.person = person;
+	}
+
+	public Encounter getEncounter() {
+		return encounter;
+	}
+
+	public void setEncounter(Encounter encounter) {
+		this.encounter = encounter;
 	}
 
 	public Set<Concept> getConcepts() {

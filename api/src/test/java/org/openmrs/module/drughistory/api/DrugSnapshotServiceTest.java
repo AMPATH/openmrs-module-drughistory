@@ -16,6 +16,7 @@ package org.openmrs.module.drughistory.api;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.Patient;
 import org.openmrs.Person;
@@ -206,19 +207,22 @@ public class DrugSnapshotServiceTest extends BaseModuleContextSensitiveTest {
 			assertTrue(ds.getConcepts().contains(c));
 		}
 
-//		// test atLeast param
-//
-//		params = new Properties();
-//		params.put("atLeast", 2);
-//
-//		actual = Context.getService(DrugSnapshotService.class).getDrugSnapshots(params);
-//
-//		assertNotNull(actual);
-//		assertFalse(actual.isEmpty());
-//
-//		for (DrugSnapshot ds : actual) {
-//			assertTrue(ds.getConcepts().size() >= 2);
-//		}
+		// test cohort param
+
+		Cohort cohort = new Cohort();
+		cohort.addMember(1);
+
+		params = new Properties();
+		params.put("cohort", cohort);
+
+		actual = Context.getService(DrugSnapshotService.class).getDrugSnapshots(params);
+
+		assertNotNull(actual);
+		assertFalse(actual.isEmpty());
+
+		for (DrugSnapshot ds : actual) {
+			assertTrue(cohort.contains(ds.getPerson().getId()));
+		}
 	}
 
 	private Date makeDate(String date) {

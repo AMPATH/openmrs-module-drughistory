@@ -17,6 +17,7 @@ package org.openmrs.module.drughistory.api.db;
 import org.openmrs.module.drughistory.Regimen;
 
 import java.util.List;
+import java.util.Properties;
 
 public interface RegimenDAO {
 
@@ -27,4 +28,6 @@ public interface RegimenDAO {
 	public Regimen saveRegimen(Regimen regimen);
 
 	public void purgeRegimen(Regimen regimen);
+
+	public List<Regimen> getRegimens(Properties params);
 }
