@@ -33,7 +33,8 @@
             width: 'auto',
             open: function() {
                 $j("#newDrug").val("");
-                $j("input[name=newDrugId]").val(""); },
+                $j("input[name=newDrugId]").val("");
+                $j("#newDrug").focus(); },
             close: function() {
                 $j("#addDrugError").hide();
                 $j("#newDrug").autocomplete("close"); },
