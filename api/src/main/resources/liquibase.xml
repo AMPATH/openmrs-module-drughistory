@@ -318,6 +318,34 @@
                 />
     </changeSet>
 
+    <changeSet id="drughistory-2014-01-28-b" author="jkeiper">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="drughistory_regimen_drug"/>
+            </not>
+        </preConditions>
+        <comment>
+            Creating the drughistory_regimen_drug table
+        </comment>
+        <createTable tableName="drughistory_regimen_drug">
+            <column name="regimen_id" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="concept_id" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="drughistory_regimen_drug_concept"
+                                 baseTableName="drughistory_regimen_drug" baseColumnNames="concept_id"
+                                 referencedTableName="concept" referencedColumnNames="concept_id"
+                />
+        <addForeignKeyConstraint constraintName="drughistory_regimen_drug_regimen"
+                                 baseTableName="drughistory_regimen_drug" baseColumnNames="regimen_id"
+                                 referencedTableName="drughistory_regimen" referencedColumnNames="regimen_id"
+                />
+    </changeSet>
+
     <changeSet id="drughistory-2014-02-12-a" author="jkeiper">
         <preConditions onFail="WARN">
             <not>
