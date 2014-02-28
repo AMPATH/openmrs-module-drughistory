@@ -192,7 +192,7 @@
                     <spring:bind path="regimen.line">
                         <select name="line">
                             <c:forEach var="l" items="${allLines}">
-                                <option label="${l}" value="${l}" <c:if test="${status.value == l}">selected="selected"</c:if>></option>
+                                <option label="${l}" value="${l}" <c:if test="${status.value == l}">selected="selected"</c:if>>${l}</option>
                             </c:forEach>
                         </select>
                         <c:if test="${status.errorMessage != ''}"><c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if></c:if>
@@ -205,7 +205,7 @@
                     <spring:bind path="regimen.age">
                         <select name="age">
                             <c:forEach var="l" items="${allAges}">
-                                <option label="${l}" value="${l}" <c:if test="${status.value == l}">selected="selected"</c:if>></option>
+                                <option label="${l}" value="${l}" <c:if test="${status.value == l}">selected="selected"</c:if>>${l}</option>
                             </c:forEach>
                         </select>
                         <c:if test="${status.errorMessage != ''}"><c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if></c:if>
