@@ -95,6 +95,7 @@ public class DrugSnapshot extends BaseOpenmrsObject {
 		DrugSnapshot ds = new DrugSnapshot();
 		ds.setDateTaken(this.getDateTaken());
 		ds.setPerson(this.getPerson());
+		ds.setEncounter(this.getEncounter());
 		for (Concept c : this.getConcepts()) {
 			ds.addConcept(c);
 		}
